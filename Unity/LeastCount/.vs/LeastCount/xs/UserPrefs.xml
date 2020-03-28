@@ -1,0 +1,51 @@
+﻿<Properties StartupConfiguration="{9562C9BD-53EE-3FF6-C8FF-9289A9E5C2BF}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/UI/CardUI.cs">
+    <Files>
+      <File FileName="Assets/Scripts/Singletons/DebugMenu.cs" Line="24" Column="1" />
+      <File FileName="Assets/Scripts/Globals.cs" />
+      <File FileName="Assets/Scripts/GameModes/Puzzle.cs" Line="82" Column="1" />
+      <File FileName="Assets/Scripts/GameModes/AIPlayer.cs" />
+      <File FileName="Assets/Scripts/GameModes/InputPlayer.cs" />
+      <File FileName="Assets/Scripts/Singletons/Toast.cs" />
+      <File FileName="Assets/Scripts/UI/PuzzleUI.cs" />
+      <File FileName="Assets/Scripts/UI/CardUI.cs" Line="43" Column="1" NotebookId="1" />
+      <File FileName="Assets/Scripts/Singletons/DeckManager.cs" NotebookId="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="LeastCount" expanded="True">
+            <Node name="Assets" expanded="True">
+              <Node name="Plugins" expanded="True">
+                <Node name="LeanTouch" expanded="True">
+                  <Node name="Scripts" expanded="True" />
+                </Node>
+                <Node name="Pixelplacement" expanded="True">
+                  <Node name="iTween" expanded="True" />
+                </Node>
+              </Node>
+              <Node name="Scripts" expanded="True">
+                <Node name="Core" expanded="True" />
+                <Node name="GameModes" expanded="True" />
+                <Node name="Singletons" expanded="True" />
+                <Node name="UI" expanded="True">
+                  <Node name="CardUI.cs" selected="True" />
+                </Node>
+                <Node name="Utils" expanded="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="101b0122-91c1-4a99-ba82-3d2a3ef7c4c2" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/rao/Git/ProjectUnity2/Unity/LeastCount/Assets/Scripts/GameModes/InputPlayer.cs" relfile="Assets/Scripts/GameModes/InputPlayer.cs" line="143" column="13" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>

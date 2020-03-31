@@ -14,9 +14,9 @@ public class AIPlayer: Player
     {
     }
 
-    public override void ProcessTurn(int teamIndex, int playerIndex)
+    public override void ProcessTurn(int playerIndex)
     {
-        if (this.TeamIndex != teamIndex || this.PlayerIndex != playerIndex)
+        if (this.PlayerIndex != playerIndex)
         {
             this.MyTurn = false;
             return;
@@ -134,17 +134,7 @@ public class AIPlayer: Player
         //  may be we should check on calling leastCount!!
         if(val1 == 0 && val2 < 0 && val3 < 0)
         {
-            int total = 0;
-            foreach(Card card in Cards)
-            {
-                int val = (int)card.mNumber;
-                if (val > 10)
-                    val = 10;
-                total += val;
-            }
-            string text = "AI" + PlayerIndex.ToString() + "_Player LEAST COUNT!! Count: "+ total.ToString();
-            Globals.ShowToast(text, 15, null);
-            Debug.Log(text);
+            GameMode.Instance.puzzle.OnLeastCount(this.PlayerIndex);
         }
         else
         {

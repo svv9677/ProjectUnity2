@@ -19,7 +19,6 @@ public class InputPlayer : Player
 
     public InputPlayer ()
     {
-        base.TeamIndex = 0;
         this.TurnState = eTurnState.E_TS_NONE;
     }
 
@@ -268,6 +267,9 @@ public class InputPlayer : Player
 
         if(Input.GetKeyDown(KeyCode.BackQuote))
             ToggleDebugMenu();
+
+        if(Input.GetKeyDown(KeyCode.R))
+            GameMode.Instance.SetMode(eMode.E_M_RESULTS);
     }
 
     public void ToggleDebugMenu()
@@ -278,9 +280,9 @@ public class InputPlayer : Player
             DebugMenu.Instance.gameObject.SetActive(true);
     }
 
-    public override void ProcessTurn(int teamIndex, int playerIndex)
+    public override void ProcessTurn(int playerIndex)
     {
-        if (this.TeamIndex == teamIndex && this.PlayerIndex == playerIndex)
+        if (this.PlayerIndex == playerIndex)
         {
             if (!this.MyTurn)
             {

@@ -1,9 +1,10 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
 public enum ePuzzleState {
-	E_PS_SELECT_NUM_PLAYERS = 0,
+	E_PS_SELECT_PLAYERS = 0,
     E_PS_DISTRIBUTE_CARDS,
     E_PS_PLAYER_TURN,
 
@@ -16,7 +17,6 @@ public class Puzzle : Mode {
 
     public ePuzzleState PuzzleState;
     private int NumPlayers;
-    private int NumTeams;
     private int TurnCount;
     private int CardsToDistribute;
 
@@ -33,6 +33,10 @@ public class Puzzle : Mode {
     public GameObject Player3Parent;
     public GameObject UsedPileParent;
     public GameObject DrawPileParent;
+
+    public Text AIPlayer1Name;
+    public Text AIPlayer2Name;
+    public Text AIPlayer3Name;
 
     [HideInInspector]
     public PuzzleUI MyPuzzleUI;
@@ -61,6 +65,27 @@ public class Puzzle : Mode {
         return null;
     }
 
+    public void OnLeastCount(int playerIndex)
+    {
+        List<Card> Cards;
+        if (playerIndex == 0)
+            Cards = MyPlayer.Cards;
+        else
+            Cards = AIPlayers[playerIndex - 1].Cards;
+
+        int total = 0;
+        foreach (Card card in Cards)
+        {
+            int val = (int)card.mNumber;
+            if (val > 10)
+                val = 10;
+            total += val;
+        }
+        string text = "Player " + playerIndex.ToString() + " - LEAST COUNT!! Count: " + total.ToString();
+        Globals.ShowToast(text, 15, 5.0f);
+        Debug.Log(text);
+    }
+
     public override void EnterMode()
 	{
         if(MyPlayer)
@@ -81,10 +106,12 @@ public class Puzzle : Mode {
                 card.Destroy();
         }
 
-        this.PuzzleState = ePuzzleState.E_PS_SELECT_NUM_PLAYERS;
+        this.PuzzleState = ePuzzleState.E_PS_SELECT_PLAYERS;
         GameObject obj = new GameObject();
         this.MyPuzzleUI = obj.AddComponent<PuzzleUI>();
 		this.SetVisible (true);
+
+        base.EnterMode();
 	}
 
 	public override void ExitMode()
@@ -97,10 +124,9 @@ public class Puzzle : Mode {
 	{
 		switch(this.PuzzleState)
 		{
-        case ePuzzleState.E_PS_SELECT_NUM_PLAYERS:
+        case ePuzzleState.E_PS_SELECT_PLAYERS:
             // For now default to globals' min player count
             this.NumPlayers = Globals.gMinimumPlayers;
-            this.NumTeams = Globals.gMinimumPlayers;
             // 7 cards per player as per rules
             this.CardsToDistribute = 7;
             this.AIPlayers = new List<AIPlayer>();
@@ -108,14 +134,12 @@ public class Puzzle : Mode {
             {
                 GameObject obj = new GameObject();
                 AIPlayer plyrInst = obj.AddComponent<AIPlayer>();
-                plyrInst.TeamIndex = i;
                 plyrInst.PlayerIndex = i;
                 this.AIPlayers.Add(plyrInst);
             }
 
             GameObject plyrObj = new GameObject();
             this.MyPlayer = plyrObj.AddComponent<InputPlayer>();
-            this.MyPlayer.TeamIndex = 0;
             this.MyPlayer.PlayerIndex = 0;
 
             this.TurnCount = 0;
@@ -154,22 +178,21 @@ public class Puzzle : Mode {
             //DebugMenu.Instance.gameObject.SetActive(true);
             break;
         case ePuzzleState.E_PS_PLAYER_TURN:
-            int teamIndex = this.TurnCount % this.NumTeams;
             int plyrIndex = this.TurnCount % this.NumPlayers;
 
-            ProcessTurnForAll(teamIndex, plyrIndex);
+            ProcessTurnForAll(plyrIndex);
             break;
 		default:
 			break;
 		}
 	}
 
-    void ProcessTurnForAll(int teamIndex, int playerIndex)
+    void ProcessTurnForAll(int playerIndex)
     {
-        MyPlayer.ProcessTurn(teamIndex, playerIndex);
+        MyPlayer.ProcessTurn(playerIndex);
 
         for(int i=0; i<AIPlayers.Count; i++)
-            AIPlayers[i].ProcessTurn(teamIndex, playerIndex);
+            AIPlayers[i].ProcessTurn(playerIndex);
     }
 
     public void IncrementTurn() 

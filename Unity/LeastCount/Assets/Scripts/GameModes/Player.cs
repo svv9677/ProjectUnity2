@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public int TeamIndex;
     public int PlayerIndex;
 
     protected bool MyTurn = false;
@@ -29,7 +28,7 @@ public class Player : MonoBehaviour
     {
     }
 
-    public virtual void ProcessTurn(int teamIndex, int playerIndex)
+    public virtual void ProcessTurn(int playerIndex)
     {
     }
 

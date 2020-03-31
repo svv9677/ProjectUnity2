@@ -6,6 +6,7 @@ public class Splash : Mode {
 
 	public Image splashImage;
 	public Button startButton;
+	public InputField nameInput;
 
 	// Use this for initialization
 	void Start () {
@@ -46,7 +47,6 @@ public class Splash : Mode {
 
 	public override void EnterMode()
 	{
-		//HUD.Instance.gameObject.SetActive(false);
 		DebugMenu.Instance.gameObject.SetActive(false);
 		Toast.Instance.gameObject.SetActive(false);
 
@@ -67,6 +67,7 @@ public class Splash : Mode {
 
 	public void OnStart()
 	{
+		User.Instance.Save(nameInput.text);
 		this.StartTween (true, 1.0f);
 	}
 }

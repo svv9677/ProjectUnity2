@@ -6,8 +6,8 @@ public enum eMode
 {
 	E_M_NONE,
 	E_M_SPLASH,
-	E_M_LEVELS,
 	E_M_PUZZLE,
+	E_M_RESULTS,
 }
 
 public class GameMode : Singleton<GameMode> {
@@ -18,14 +18,17 @@ public class GameMode : Singleton<GameMode> {
 
 	public Puzzle puzzle;
 	public Splash splash;
+	public Results results;
+
     public GameObject canvasObj;
     public GameObject boardObj;
     public GameObject cardsParentObj;
 
 	// Use this for initialization
 	void Start () {
-		this.puzzle.gameObject.SetActive(false);
-		this.splash.gameObject.SetActive(false);
+		this.puzzle?.gameObject.SetActive(false);
+		this.splash?.gameObject.SetActive(false);
+		this.results?.gameObject.SetActive(false);
 
 		this.mode = eMode.E_M_NONE;
 		SetMode (eMode.E_M_SPLASH);
@@ -67,6 +70,11 @@ public class GameMode : Singleton<GameMode> {
 			this.modeObject = this.puzzle;
 			break;
 		}
+		case eMode.E_M_RESULTS:
+        {
+			this.modeObject = this.results;
+			break;
+        }
 		default:
 			break;
 		}

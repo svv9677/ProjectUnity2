@@ -11,7 +11,7 @@ public enum eTurnState {
     E_TS_TOTAL_TURNS
 }
 
-public class InputPlayer : Player
+public class InputPlayer : GamePlayer
 {
     private eTurnState TurnState;
     public LayerMask LayerMask = UnityEngine.Physics.DefaultRaycastLayers;
@@ -34,14 +34,15 @@ public class InputPlayer : Player
         Lean.LeanTouch.OnMultiTap += OnMultiTap;
     }
 
-    public override void OnDisable()
+    public override void OnDisabled()
     {
         // Unhook into the OnFingerTap event
         Lean.LeanTouch.OnFingerTap -= OnFingerTap;
         Lean.LeanTouch.OnMultiTap -= OnMultiTap;
+        Debug.Log("Input Player onDisabled calleD!!");
     }
 
-    public void SetCards(List<Card> cards)
+    public override void SetCards(List<Card> cards)
     {
         Cards.AddRange(cards);
 
@@ -64,7 +65,7 @@ public class InputPlayer : Player
             else
             {
                 Cards[i].MoveCard(x + (xx * xdelta), Globals.PLAYERCARDS_START_Y[this.PlayerIndex],
-                                  GameMode.Instance.puzzle.Player0Parent, 0.05f*i);
+                                  GameMode.Instance.puzzle.MyPuzzleUI.Player0Parent, 0.05f*i);
                 Cards[i].SetPrefix(Globals.PLAYER_PREFIXES[this.PlayerIndex]);
             }
             Cards[i].Open();

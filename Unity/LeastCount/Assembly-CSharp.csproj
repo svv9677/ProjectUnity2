@@ -76,8 +76,9 @@
     <Compile Include="Assets\Photon\PhotonRealtime\Demos\DemoLoadBalancing\ConnectAndJoinRandomLb.cs" />
     <Compile Include="Assets\Scripts\Core\Mode.cs" />
     <Compile Include="Assets\Scripts\GameModes\AIPlayer.cs" />
+    <Compile Include="Assets\Scripts\GameModes\GamePlayer.cs" />
     <Compile Include="Assets\Scripts\GameModes\InputPlayer.cs" />
-    <Compile Include="Assets\Scripts\GameModes\Player.cs" />
+    <Compile Include="Assets\Scripts\GameModes\Online.cs" />
     <Compile Include="Assets\Scripts\GameModes\Puzzle.cs" />
     <Compile Include="Assets\Scripts\GameModes\Results.cs" />
     <Compile Include="Assets\Scripts\GameModes\Splash.cs" />
@@ -85,12 +86,16 @@
     <Compile Include="Assets\Scripts\Singletons\DebugMenu.cs" />
     <Compile Include="Assets\Scripts\Singletons\DeckManager.cs" />
     <Compile Include="Assets\Scripts\Singletons\GameMode.cs" />
+    <Compile Include="Assets\Scripts\Singletons\OnlineManager.cs" />
     <Compile Include="Assets\Scripts\Singletons\ScoringManager.cs" />
     <Compile Include="Assets\Scripts\Singletons\Toast.cs" />
     <Compile Include="Assets\Scripts\Singletons\User.cs" />
     <Compile Include="Assets\Scripts\UI\CardUI.cs" />
+    <Compile Include="Assets\Scripts\UI\OnlineItem.cs" />
+    <Compile Include="Assets\Scripts\UI\OnlineUI.cs" />
     <Compile Include="Assets\Scripts\UI\PuzzleUI.cs" />
     <Compile Include="Assets\Scripts\UI\ResultsItem.cs" />
+    <Compile Include="Assets\Scripts\UI\ResultsUI.cs" />
     <Compile Include="Assets\Scripts\Utils\DeviceChange.cs" />
     <Compile Include="Assets\Scripts\Utils\Extensions.cs" />
     <Compile Include="Assets\Scripts\Utils\FileUtils.cs" />

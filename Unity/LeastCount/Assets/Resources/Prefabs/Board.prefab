@@ -157,6 +157,7 @@ GameObject:
   - component: {fileID: 224720516399357928}
   - component: {fileID: 222943222548419802}
   - component: {fileID: 114777886485518018}
+  - component: {fileID: 4659792534181153399}
   m_Layer: 5
   m_Name: Board
   m_TagString: Untagged
@@ -212,9 +213,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PuzzleState: 0
-  MyPlayer: {fileID: 0}
-  AIPlayers: []
+  Players: []
   LastDroppedCardCount: 0
+  AIPlayer1Name: {fileID: 8668631377943726365}
+  AIPlayer2Name: {fileID: 8962839978303590933}
+  AIPlayer3Name: {fileID: 1815885048240687076}
+  MyPuzzleUI: {fileID: 0}
+--- !u!114 &4659792534181153399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1136089973277044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d0f539568338497298687148a9ca7d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   Player0Parent: {fileID: 6632291966372965863}
   Player1Parent: {fileID: 1192766529}
   Player2Parent: {fileID: 2320813050714894550}
@@ -224,7 +240,6 @@ MonoBehaviour:
   AIPlayer1Name: {fileID: 8668631377943726365}
   AIPlayer2Name: {fileID: 8962839978303590933}
   AIPlayer3Name: {fileID: 1815885048240687076}
-  MyPuzzleUI: {fileID: 0}
 --- !u!1 &345913260859909669
 GameObject:
   m_ObjectHideFlags: 0

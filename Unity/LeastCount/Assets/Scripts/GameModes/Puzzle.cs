@@ -20,25 +20,11 @@ public class Puzzle : Mode {
     private int TurnCount;
     private int CardsToDistribute;
 
-    public InputPlayer MyPlayer;
-    public List<AIPlayer> AIPlayers;
+    public List<GamePlayer> Players;
     public List<Card> DrawPile;
     public List<Card> UsedPile;
 
     public int LastDroppedCardCount = 0;
-
-    public GameObject Player0Parent;
-    public GameObject Player1Parent;
-    public GameObject Player2Parent;
-    public GameObject Player3Parent;
-    public GameObject UsedPileParent;
-    public GameObject DrawPileParent;
-
-    public Text AIPlayer1Name;
-    public Text AIPlayer2Name;
-    public Text AIPlayer3Name;
-
-    [HideInInspector]
     public PuzzleUI MyPuzzleUI;
 
 	public override string ToString ()
@@ -49,29 +35,23 @@ public class Puzzle : Mode {
 	protected void SetVisible(bool hideFlags)
 	{
 		this.gameObject.SetActive (hideFlags);
-
-		//HUD.Instance.gameObject.SetActive(hideFlags);
 	}
 
     public GameObject GetAIParentForIndex(int index)
     {
         if (index == 1)
-            return Player1Parent;
+            return MyPuzzleUI.Player1Parent;
         if (index == 2)
-            return Player2Parent;
+            return MyPuzzleUI.Player2Parent;
         if (index == 3)
-            return Player3Parent;
+            return MyPuzzleUI.Player3Parent;
 
         return null;
     }
 
     public void OnLeastCount(int playerIndex)
     {
-        List<Card> Cards;
-        if (playerIndex == 0)
-            Cards = MyPlayer.Cards;
-        else
-            Cards = AIPlayers[playerIndex - 1].Cards;
+        List<Card> Cards = Players[playerIndex].Cards;
 
         int total = 0;
         foreach (Card card in Cards)
@@ -88,11 +68,9 @@ public class Puzzle : Mode {
 
     public override void EnterMode()
 	{
-        if(MyPlayer)
-            MyPlayer.Destroy();
-        if(AIPlayers != null)
+        if(Players != null)
         {
-            foreach (AIPlayer plyr in AIPlayers)
+            foreach (GamePlayer plyr in Players)
                 plyr.Destroy();
         }
         if(UsedPile != null)
@@ -107,8 +85,7 @@ public class Puzzle : Mode {
         }
 
         this.PuzzleState = ePuzzleState.E_PS_SELECT_PLAYERS;
-        GameObject obj = new GameObject();
-        this.MyPuzzleUI = obj.AddComponent<PuzzleUI>();
+        this.MyPuzzleUI = this.gameObject.GetComponent<PuzzleUI>();
 		this.SetVisible (true);
 
         base.EnterMode();
@@ -128,35 +105,39 @@ public class Puzzle : Mode {
             // For now default to globals' min player count
             this.NumPlayers = Globals.gMinimumPlayers;
             // 7 cards per player as per rules
-            this.CardsToDistribute = 7;
-            this.AIPlayers = new List<AIPlayer>();
-            for(int i=1; i< this.NumPlayers; i++)
+            this.CardsToDistribute = Globals.gCardsToDistribute;
+
+            this.Players = new List<GamePlayer>();
+            for(int i=0; i< this.NumPlayers; i++)
             {
                 GameObject obj = new GameObject();
-                AIPlayer plyrInst = obj.AddComponent<AIPlayer>();
-                plyrInst.PlayerIndex = i;
-                this.AIPlayers.Add(plyrInst);
+                //TODO: Get the player indices from match making and instantiate appropriate players
+                // InputPlayer, AIPlayer or RemotePlayer
+                if (i == 0)
+                {
+                    InputPlayer plyrInst = obj.AddComponent<InputPlayer>();
+                    plyrInst.PlayerIndex = i;
+                    this.Players.Add(plyrInst);
+                }
+                else
+                {
+                    AIPlayer plyrInst = obj.AddComponent<AIPlayer>();
+                    plyrInst.PlayerIndex = i;
+                    this.Players.Add(plyrInst);
+                }
             }
 
-            GameObject plyrObj = new GameObject();
-            this.MyPlayer = plyrObj.AddComponent<InputPlayer>();
-            this.MyPlayer.PlayerIndex = 0;
-
             this.TurnCount = 0;
-
             this.PuzzleState = ePuzzleState.E_PS_DISTRIBUTE_CARDS;
             break;
         case ePuzzleState.E_PS_DISTRIBUTE_CARDS:
             // shuffle the deck first!
             DeckManager.Instance.mDeck.Shuffle();
-            // Give 'n' cards to my player
-            this.MyPlayer.SetCards(DeckManager.Instance.mDeck.GetRange(0, this.CardsToDistribute));
-            DeckManager.Instance.mDeck.RemoveRange(0, this.CardsToDistribute);
 
-            // Give 'n' cards to each AI player
-            for (int i = 0; i < this.NumPlayers - 1; i++)
+            // Give 'n' cards to each player
+            for (int i = 0; i < this.NumPlayers; i++)
             {
-                this.AIPlayers[i].SetCards(DeckManager.Instance.mDeck.GetRange(0, this.CardsToDistribute));
+                this.Players[i].SetCards(DeckManager.Instance.mDeck.GetRange(0, this.CardsToDistribute));
                 DeckManager.Instance.mDeck.RemoveRange(0, this.CardsToDistribute);
             }
 
@@ -174,8 +155,6 @@ public class Puzzle : Mode {
             MyPuzzleUI.UpdateDistributionDisplays(this, true);
 
             this.PuzzleState = ePuzzleState.E_PS_PLAYER_TURN;
-
-            //DebugMenu.Instance.gameObject.SetActive(true);
             break;
         case ePuzzleState.E_PS_PLAYER_TURN:
             int plyrIndex = this.TurnCount % this.NumPlayers;
@@ -189,10 +168,8 @@ public class Puzzle : Mode {
 
     void ProcessTurnForAll(int playerIndex)
     {
-        MyPlayer.ProcessTurn(playerIndex);
-
-        for(int i=0; i<AIPlayers.Count; i++)
-            AIPlayers[i].ProcessTurn(playerIndex);
+        for(int i=0; i<Players.Count; i++)
+            Players[i].ProcessTurn(playerIndex);
     }
 
     public void IncrementTurn() 

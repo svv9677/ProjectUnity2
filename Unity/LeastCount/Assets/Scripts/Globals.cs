@@ -23,7 +23,7 @@ public static class Globals
 
 	public delegate void ToastCallback();
 
-	public static void ShowToast(string txt, int size, float duration = 1.0f, ToastCallback callback = null)
+	public static void ShowToast(string txt, int size, float duration = 4.0f, ToastCallback callback = null)
 	{
         Globals.TOAST_DURATION = duration;
 		Toast.Instance.gameObject.SetActive(true);
@@ -54,6 +54,7 @@ public static class Globals
     /// Other globals
     /// </summary>
     public static int gMinimumPlayers = 4;
+    public static int gCardsToDistribute = 7;
 
     // First one is for input player, rest for 3 AI players
     public const string PLAYER0_PREFIX = "ME__";

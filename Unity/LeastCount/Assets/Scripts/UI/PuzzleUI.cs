@@ -1,9 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PuzzleUI : MonoBehaviour
 {
+
+    public GameObject Player0Parent;
+    public GameObject Player1Parent;
+    public GameObject Player2Parent;
+    public GameObject Player3Parent;
+
+    public GameObject UsedPileParent;
+    public GameObject DrawPileParent;
+
+    public Text AIPlayer1Name;
+    public Text AIPlayer2Name;
+    public Text AIPlayer3Name;
+
     public void UpdateDistributionDisplays(Puzzle puzzle, bool init=false)
     {
         int movedCount = 0;
@@ -27,7 +41,7 @@ public class PuzzleUI : MonoBehaviour
                     x = (puzzle.UsedPile.Count-minCards-i) * 50f;
 
                 card.mMoveDirty = false;
-                card.MoveCard(x, 0f, GameMode.Instance.puzzle.UsedPileParent, 0.05f*movedCount);
+                card.MoveCard(x, 0f, UsedPileParent, 0.05f*movedCount);
                 card.mCardObj.transform.SetAsLastSibling();
                 movedCount++;
             }
@@ -49,7 +63,7 @@ public class PuzzleUI : MonoBehaviour
             if(card.mMoveDirty)
             {
                 card.mMoveDirty = false;
-                card.MoveCard(0f, 0f, GameMode.Instance.puzzle.DrawPileParent, 0.05f*movedCount);
+                card.MoveCard(0f, 0f, DrawPileParent, 0.05f*movedCount);
                 card.mCardObj.transform.SetAsLastSibling();
             }
         }

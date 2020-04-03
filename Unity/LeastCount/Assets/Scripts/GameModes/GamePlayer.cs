@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class GamePlayer : MonoBehaviour
 {
     public int PlayerIndex;
 
@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
 
     public List<Card> Cards;
 
-    public Player ()
+    public void Start()
     {
         Cards = new List<Card>();
     }
@@ -21,14 +21,18 @@ public class Player : MonoBehaviour
         foreach (Card card in Cards)
             card.Destroy();
 
-        this.OnDisable();
+        this.OnDisabled();
     }
 
-    public virtual void OnDisable()
+    public virtual void OnDisabled()
     {
     }
 
     public virtual void ProcessTurn(int playerIndex)
+    {
+    }
+
+    public virtual void SetCards(List<Card> cards)
     {
     }
 

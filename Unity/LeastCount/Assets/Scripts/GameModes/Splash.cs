@@ -5,8 +5,11 @@ using System.Collections;
 public class Splash : Mode {
 
 	public Image splashImage;
-	public Button startButton;
+	public Button startSinglePlayer;
+	public Button startOnlinePlayer;
 	public InputField nameInput;
+
+	private eMode nextMode;
 
 	// Use this for initialization
 	void Start () {
@@ -36,7 +39,7 @@ public class Splash : Mode {
 
 		this.SetVisible (hideFlag);
 		if(!hideFlag)
-			GameMode.Instance.SetMode(eMode.E_M_PUZZLE);
+			GameMode.Instance.SetMode(this.nextMode);
 	}
 
 	protected void SetVisible(bool hideFlags)
@@ -52,7 +55,8 @@ public class Splash : Mode {
 
 		this.SetVisible (true);
 		this.splashImage.transform.localPosition = new Vector3(-1920.0f,0,0);
-		this.startButton.onClick.AddListener(OnStart);
+		this.startSinglePlayer.onClick.AddListener(OnStartSingleplayer);
+		this.startOnlinePlayer.onClick.AddListener(OnStartMultiplayer);
 		this.StartTween (false);
 
         ScoringManager.Instance.Load();
@@ -62,12 +66,37 @@ public class Splash : Mode {
 
 	public override void ExitMode()
 	{
-		this.startButton.onClick.RemoveListener(OnStart);
+		this.startSinglePlayer.onClick.RemoveListener(OnStartSingleplayer);
+		this.startOnlinePlayer.onClick.RemoveListener(OnStartMultiplayer);
 	}
 
-	public void OnStart()
+	public void OnStartSingleplayer()
 	{
-		User.Instance.Save(nameInput.text);
-		this.StartTween (true, 1.0f);
+		string finalName = nameInput.text.Trim();
+		if (finalName == "")
+		{
+			Globals.ShowToast("Please enter a valid name", 30);
+			return;
+		}
+		if (User.Instance.Save(finalName, false))
+		{
+			this.nextMode = eMode.E_M_PUZZLE;
+			this.StartTween(true, 1.0f);
+		}
+	}
+
+	public void OnStartMultiplayer()
+	{
+		string finalName = nameInput.text.Trim();
+		if (finalName == "")
+		{
+			Globals.ShowToast("Please enter a valid name", 30);
+			return;
+		}
+		if (User.Instance.Save(finalName, true))
+		{
+			this.nextMode = eMode.E_M_ONLINE;
+			this.StartTween(true, 1.0f);
+		}
 	}
 }

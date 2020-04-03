@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 
-public class Results : Mode
+public class Online : Mode
 {
     [HideInInspector]
-    public ResultsUI MyResultsUI;
+    public OnlineUI MyOnlineUI;
 
     public override void EnterMode()
     {
-        MyResultsUI = this.gameObject.GetComponent<ResultsUI>();
-        MyResultsUI.OnInit();        
+        MyOnlineUI = this.gameObject.GetComponent<OnlineUI>();
+        MyOnlineUI.OnInit();
 
         base.EnterMode();
     }
@@ -21,6 +21,6 @@ public class Results : Mode
 
     public void Update()
     {
-        
+
     }
 }

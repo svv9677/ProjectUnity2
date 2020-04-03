@@ -6,6 +6,7 @@ public enum eMode
 {
 	E_M_NONE,
 	E_M_SPLASH,
+    E_M_ONLINE,
 	E_M_PUZZLE,
 	E_M_RESULTS,
 }
@@ -19,6 +20,7 @@ public class GameMode : Singleton<GameMode> {
 	public Puzzle puzzle;
 	public Splash splash;
 	public Results results;
+	public Online online;
 
     public GameObject canvasObj;
     public GameObject boardObj;
@@ -29,6 +31,7 @@ public class GameMode : Singleton<GameMode> {
 		this.puzzle?.gameObject.SetActive(false);
 		this.splash?.gameObject.SetActive(false);
 		this.results?.gameObject.SetActive(false);
+		this.online?.gameObject.SetActive(false);
 
 		this.mode = eMode.E_M_NONE;
 		SetMode (eMode.E_M_SPLASH);
@@ -75,6 +78,11 @@ public class GameMode : Singleton<GameMode> {
 			this.modeObject = this.results;
 			break;
         }
+		case eMode.E_M_ONLINE:
+		{
+			this.modeObject = this.online;
+			break;
+		}
 		default:
 			break;
 		}

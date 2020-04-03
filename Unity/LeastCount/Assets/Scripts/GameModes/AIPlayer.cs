@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-public class AIPlayer: Player
+public class AIPlayer: GamePlayer
 {
     private Dictionary<eCardNumber, int> CardTallies;
     private eCardNumber HighestTalliedCardNumber;
@@ -12,6 +12,27 @@ public class AIPlayer: Player
 
     public AIPlayer ()
     {
+    }
+
+    public override void OnDisabled()
+    {
+        this.CardTallies = null;
+        this.HighestTalliedCardNumber = eCardNumber.E_CN_TOTAL;
+        this.HighestTally = 0;
+        this.MatchingCount = 0;
+        base.OnDisabled();
+    }
+
+    public override void SetCards(List<Card> cards)
+    {
+        this.Cards.AddRange(cards);
+        for (int i = 0; i < this.Cards.Count; i++)
+        {
+            this.Cards[i].InitCardUI(Globals.PLAYERCARDS_START_X[this.PlayerIndex],
+                                     Globals.PLAYERCARDS_START_Y[this.PlayerIndex],
+                                     Globals.PLAYER_PREFIXES[this.PlayerIndex]);
+            this.Cards[i].Close();
+        }
     }
 
     public override void ProcessTurn(int playerIndex)
@@ -238,19 +259,6 @@ public class AIPlayer: Player
             Cards[i].SetSelectable(true);
         }
     }
-
-    public void SetCards(List<Card> cards)
-    {
-        this.Cards.AddRange(cards);
-        for (int i = 0; i < this.Cards.Count; i++)
-        {
-            this.Cards[i].InitCardUI(Globals.PLAYERCARDS_START_X[this.PlayerIndex],
-                                     Globals.PLAYERCARDS_START_Y[this.PlayerIndex],
-                                     Globals.PLAYER_PREFIXES[this.PlayerIndex]);
-            this.Cards[i].Close();
-        }
-    }
-
 
 }
 

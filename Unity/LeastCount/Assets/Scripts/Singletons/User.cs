@@ -19,13 +19,37 @@ public class User : Singleton<User>
 		GameMode.Instance.splash.nameInput.text = this.Name;
 	}
 
-	public void Save(string name, int level=-1)
+	public bool Save(string name, bool online, int level=-1)
 	{
-		this.Name = name;
-		if (level > 0)
-			this.Level = level;
-		PlayerPrefs.SetInt(Globals.PREF_LEVEL, this.Level);
-		PlayerPrefs.SetString(Globals.PREF_NAME, this.Name);
+        if(online)
+        {
+			// First connect online and check for unique name
+			eConnectionState connected = OnlineManager.Instance.ConnectAs(name);
+
+			if (connected == eConnectionState.E_CS_CONNECTED)
+			{
+				this.Name = name;
+				if (level > 0)
+					this.Level = level;
+				PlayerPrefs.SetInt(Globals.PREF_LEVEL, this.Level);
+				PlayerPrefs.SetString(Globals.PREF_NAME, this.Name);
+			}
+			else if (connected == eConnectionState.E_CS_DUPLICATE_NAME)
+			{
+				Globals.ShowToast("Name already taken!!", 30);
+			}
+
+			return connected == eConnectionState.E_CS_CONNECTED;
+		}
+        else
+        {
+			this.Name = name;
+			if (level > 0)
+				this.Level = level;
+			PlayerPrefs.SetInt(Globals.PREF_LEVEL, this.Level);
+			PlayerPrefs.SetString(Globals.PREF_NAME, this.Name);
+			return true;
+		}
 	}
 
 	public override string ToString ()

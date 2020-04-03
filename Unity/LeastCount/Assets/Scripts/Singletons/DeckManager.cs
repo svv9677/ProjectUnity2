@@ -176,25 +176,25 @@ public class Card
         switch(mPrefix)
         {
             case "_":
-                parent = GameMode.Instance.puzzle.DrawPileParent;
+                parent = GameMode.Instance.puzzle.MyPuzzleUI.DrawPileParent;
                 break;
             case "__":
-                parent = GameMode.Instance.puzzle.UsedPileParent;
+                parent = GameMode.Instance.puzzle.MyPuzzleUI.UsedPileParent;
                 break;
             case Globals.PLAYER0_PREFIX:
-                parent = GameMode.Instance.puzzle.Player0Parent;
+                parent = GameMode.Instance.puzzle.MyPuzzleUI.Player0Parent;
                 break;
             case Globals.PLAYER1_PREFIX:
-                parent = GameMode.Instance.puzzle.Player1Parent;
+                parent = GameMode.Instance.puzzle.MyPuzzleUI.Player1Parent;
                 break;
             case Globals.PLAYER2_PREFIX:
-                parent = GameMode.Instance.puzzle.Player2Parent;
+                parent = GameMode.Instance.puzzle.MyPuzzleUI.Player2Parent;
                 break;
             case Globals.PLAYER3_PREFIX:
-                parent = GameMode.Instance.puzzle.Player3Parent;
+                parent = GameMode.Instance.puzzle.MyPuzzleUI.Player3Parent;
                 break;
             default:
-                parent = GameMode.Instance.puzzle.UsedPileParent;
+                parent = GameMode.Instance.puzzle.MyPuzzleUI.UsedPileParent;
                 break;
         }
         mCardObj.transform.SetParent(parent.transform, false);

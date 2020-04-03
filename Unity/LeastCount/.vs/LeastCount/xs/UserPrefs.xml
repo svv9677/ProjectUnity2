@@ -1,14 +1,14 @@
 ﻿<Properties StartupConfiguration="{9562C9BD-53EE-3FF6-C8FF-9289A9E5C2BF}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/UI/OnlineUI.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Photon/PhotonUnityNetworking/Code/PhotonNetwork.cs">
     <Files>
-      <File FileName="Assets/Scripts/Globals.cs" Line="66" Column="37" />
+      <File FileName="Assets/Scripts/Globals.cs" Line="26" Column="56" />
       <File FileName="Assets/Scripts/GameModes/Puzzle.cs" Line="110" Column="41" />
       <File FileName="Assets/Scripts/GameModes/AIPlayer.cs" Line="6" Column="1" />
       <File FileName="Assets/Scripts/GameModes/InputPlayer.cs" Line="14" Column="32" />
       <File FileName="Assets/Scripts/GameModes/Splash.cs" Line="81" Column="1" />
       <File FileName="Assets/Scripts/Singletons/GameMode.cs" Line="81" Column="25" />
       <File FileName="Assets/Scripts/GameModes/Online.cs" Line="27" Column="1" />
-      <File FileName="Assets/Scripts/UI/OnlineUI.cs" Line="44" Column="1" />
+      <File FileName="Assets/Scripts/UI/OnlineUI.cs" Line="86" Column="1" />
       <File FileName="Assets/Scripts/Singletons/User.cs" Line="51" Column="16" />
       <File FileName="Assets/Scripts/Singletons/DeckManager.cs" Line="314" Column="14" NotebookId="1" />
       <File FileName="Assets/Scripts/UI/PuzzleUI.cs" Line="66" Column="39" NotebookId="1" />
@@ -18,7 +18,8 @@
       <File FileName="Assets/Scripts/UI/ResultsUI.cs" Line="15" Column="1" NotebookId="1" />
       <File FileName="Assets/Photon/PhotonUnityNetworking/Demos/DemoAsteroids/Scripts/Lobby/LobbyMainPanel.cs" Line="220" Column="1" NotebookId="1" />
       <File FileName="Assets/Photon/PhotonUnityNetworking/Demos/DemoAsteroids/Scripts/Lobby/LobbyTopPanel.cs" Line="1" Column="1" NotebookId="1" />
-      <File FileName="Assets/Scripts/Singletons/OnlineManager.cs" Line="81" Column="6" NotebookId="1" />
+      <File FileName="Assets/Scripts/Singletons/OnlineManager.cs" Line="57" Column="33" NotebookId="1" />
+      <File FileName="Assets/Photon/PhotonUnityNetworking/Code/PhotonNetwork.cs" Line="2076" Column="28" NotebookId="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -30,7 +31,9 @@
                   <Node name="Code" expanded="True" />
                 </Node>
                 <Node name="PhotonUnityNetworking" expanded="True">
-                  <Node name="Code" expanded="True" />
+                  <Node name="Code" expanded="True">
+                    <Node name="PhotonNetwork.cs" selected="True" />
+                  </Node>
                   <Node name="Demos" expanded="True">
                     <Node name="DemoAsteroids" expanded="True">
                       <Node name="Scripts" expanded="True">
@@ -44,9 +47,7 @@
                 <Node name="Core" expanded="True" />
                 <Node name="GameModes" expanded="True" />
                 <Node name="Singletons" expanded="True" />
-                <Node name="UI" expanded="True">
-                  <Node name="OnlineUI.cs" selected="True" />
-                </Node>
+                <Node name="UI" expanded="True" />
                 <Node name="Utils" expanded="True" />
               </Node>
             </Node>
@@ -64,9 +65,7 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="1e9e51c5-8f65-4ddc-b1f4-54d38722b51e" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/rao/Git/ProjectUnity2/Unity/LeastCount/Assets/Scripts/Singletons/OnlineManager.cs" relfile="Assets/Scripts/Singletons/OnlineManager.cs" line="76" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
 </Properties>

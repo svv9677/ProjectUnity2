@@ -652,7 +652,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2522905049549282073
 RectTransform:
   m_ObjectHideFlags: 0
@@ -708,6 +708,7 @@ MonoBehaviour:
   RoomNameText: {fileID: 2940485195182656453}
   OwnerNameText: {fileID: 2488492311916168241}
   CountText: {fileID: 2341908009895674780}
+  MyOnlineUI: {fileID: 0}
 --- !u!1 &7325011948083109060
 GameObject:
   m_ObjectHideFlags: 0

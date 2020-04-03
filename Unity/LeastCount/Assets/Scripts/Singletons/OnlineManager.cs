@@ -17,8 +17,10 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
     public string ConnectionStatus = "";
 
     // All callbacks for the calling functions!
+    private Action<bool> ConnectCB;
     private Action<bool, short, string> CreateRoomCB;
     private Action<bool, short, string> JoinRoomCB;
+    private Action<bool, List<RoomInfo>> GetRoomsCB;
 
     // Use this for initialization
     public void Load()
@@ -33,6 +35,16 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
     public void Update()
     {
         ConnectionStatus = "Online Status: " + PhotonNetwork.NetworkClientState;
+    }
+
+    public void SetOnConnectedCB(Action<bool> callback)
+    {
+        ConnectCB = callback;
+    }
+
+    public void SetRoomsCB(Action<bool, List<RoomInfo>> callback)
+    {
+        GetRoomsCB = callback;
     }
 
     public eConnectionState ConnectAs(string name)
@@ -71,14 +83,31 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
 
     public override void OnConnectedToMaster()
     {
+        if (!PhotonNetwork.InLobby)
+        {
+            PhotonNetwork.JoinLobby();
+        }
+
+        if (ConnectCB != null)
+        {
+            ConnectCB(true);
+            ConnectCB = null;
+        }
+        else
+            Debug.Log("OnConnectedToMaster");
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
+        if (GetRoomsCB != null)
+            GetRoomsCB(true, roomList);
+        else
+            Debug.Log("OnRoomListUpdate");
     }
 
     public override void OnLeftLobby()
     {
+        Debug.Log("OnLeftLobby");
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
@@ -101,6 +130,7 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
+        Debug.Log("OnJoinRandomFailed");
     }
 
     public override void OnJoinedRoom()
@@ -112,25 +142,29 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
         }
         else if (JoinRoomCB != null)
         {
-            JoinRoomCB(false, 0, "");
+            JoinRoomCB(true, 0, "");
             JoinRoomCB = null;
         }
     }
 
     public override void OnLeftRoom()
     {
+        Debug.Log("OnLeftRoom");
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
+        Debug.Log("OnPlayerEnteredRoom");
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
+        Debug.Log("OnPlayerLeftRoom");
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
+        Debug.Log("OnMasterClientSwitched");
     }
 
     //public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)

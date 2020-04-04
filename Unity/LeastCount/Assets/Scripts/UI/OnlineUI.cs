@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Realtime;
 using Photon.Pun;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class OnlineUI : MonoBehaviour
 {
@@ -31,6 +32,8 @@ public class OnlineUI : MonoBehaviour
     private Dictionary<string, GameObject> roomListEntries;
     private Dictionary<int, int> playerListEntries;
 
+    private bool isPlayerReady;
+
     public void OnInit()
     {
         roomListEntries = new Dictionary<string, GameObject>();
@@ -39,6 +42,7 @@ public class OnlineUI : MonoBehaviour
         OnlineManager.Instance.SetRoomsCB(GetRoomsCB);
         LobbyParent.SetActive(true);
         RoomParent.SetActive(false);
+        isPlayerReady = false;
     }
 
     public void Update()
@@ -270,6 +274,24 @@ public class OnlineUI : MonoBehaviour
         }
 
         return true;
+    }
+
+    public void OnClickReady()
+    {
+        isPlayerReady = !isPlayerReady;
+        Hashtable props = new Hashtable() { { Globals.PLAYER_READY, isPlayerReady } };
+        PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            // Re-check if we are supposed to be the master client to kick off the game!
+            startButtonObj.gameObject.SetActive(CheckPlayersReady());
+        }
+    }
+
+    public void OnClickStart()
+    {
+
     }
 
 

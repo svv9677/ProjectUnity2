@@ -64,4 +64,6 @@ public static class Globals
     public static readonly int[] PLAYERCARDS_START_X = { 0, 0, 0, 0 };
     public static readonly int[] PLAYERCARDS_START_Y = { 0, 0, 0, 0 };
     public static readonly string[] PLAYER_PREFIXES = { PLAYER0_PREFIX, PLAYER1_PREFIX, PLAYER2_PREFIX, PLAYER3_PREFIX };
+
+    public const string PLAYER_READY = "IsPlayerReady";
 }

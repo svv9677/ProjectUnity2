@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Realtime;
 using Photon.Pun;
 using System;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public enum eConnectionState
 {
@@ -21,6 +22,8 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
     private Action<bool, short, string> CreateRoomCB;
     private Action<bool, short, string> JoinRoomCB;
     private Action<bool, List<RoomInfo>> GetRoomsCB;
+    private Action<bool, Player> GetPlayersCB;
+    private Action<Player, string> PlayerPropertiesCB;
 
     // Use this for initialization
     public void Load()
@@ -45,6 +48,16 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
     public void SetRoomsCB(Action<bool, List<RoomInfo>> callback)
     {
         GetRoomsCB = callback;
+    }
+
+    public void SetPlayersCB(Action<bool, Player> callback)
+    {
+        GetPlayersCB = callback;
+    }
+
+    public void SetPlayerPropertiesCB(Action<Player, string> callback)
+    {
+        PlayerPropertiesCB = callback;
     }
 
     public eConnectionState ConnectAs(string name)
@@ -154,12 +167,22 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        Debug.Log("OnPlayerEnteredRoom");
+        if(GetPlayersCB != null)
+        {
+            GetPlayersCB(true, newPlayer);
+        }
+        else
+            Debug.Log("OnPlayerEnteredRoom");
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        Debug.Log("OnPlayerLeftRoom");
+        if (GetPlayersCB != null)
+        {
+            GetPlayersCB(false, otherPlayer);
+        }
+        else
+            Debug.Log("OnPlayerLeftRoom");
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient)
@@ -167,9 +190,20 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
         Debug.Log("OnMasterClientSwitched");
     }
 
-    //public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
-    //{
-    //}
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        if(PlayerPropertiesCB != null)
+        {
+            string ready = "";
+            object isPlayerReady;
+            if (changedProps.TryGetValue(Globals.PLAYER_READY, out isPlayerReady))
+            {
+                ready = ((bool)isPlayerReady) ? "Ready!" : "";
+            }
+            PlayerPropertiesCB(targetPlayer, ready);
+        }
+
+    }
 
     #endregion
 

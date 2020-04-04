@@ -7,12 +7,29 @@ using Photon.Pun;
 
 public class OnlineUI : MonoBehaviour
 {
+    public GameObject LobbyParent;
+    public GameObject RoomParent;
+    public Text onlineStatusText;
+
+    [Header("Lobby")]
     public GameObject scrollContent;
     public GameObject onlineItemPrefab;
-    public Text onlineStatusText;
     public InputField roomNameInput;
 
+    [Header("Room")]
+    public Text roomNameLabel;
+    public Text player1Name;
+    public Text player1Status;
+    public Text player2Name;
+    public Text player2Status;
+    public Text player3Name;
+    public Text player3Status;
+    public Text player4Name;
+    public Text player4Status;
+    public GameObject startButtonObj;
+
     private Dictionary<string, GameObject> roomListEntries;
+    private Dictionary<int, int> playerListEntries;
 
     public void OnInit()
     {
@@ -20,6 +37,8 @@ public class OnlineUI : MonoBehaviour
 
         OnlineManager.Instance.SetOnConnectedCB(OnConnectedCB);
         OnlineManager.Instance.SetRoomsCB(GetRoomsCB);
+        LobbyParent.SetActive(true);
+        RoomParent.SetActive(false);
     }
 
     public void Update()
@@ -92,6 +111,7 @@ public class OnlineUI : MonoBehaviour
         else
         {
             // Move away from online lobby to online game room UI
+            SwitchToRoom();
         }
     }
 
@@ -123,8 +143,131 @@ public class OnlineUI : MonoBehaviour
         else
         {
             // Move away from online lobby to online game room UI
+            SwitchToRoom();
         }
     }
+
+    private void SwitchToRoom()
+    {
+        LobbyParent.SetActive(false);
+        RoomParent.SetActive(true);
+
+        OnlineManager.Instance.SetPlayersCB(GetPlayersCB);
+        OnlineManager.Instance.SetPlayerPropertiesCB(PlayerPropertiesCB);
+
+        PopulatePlayers();
+    }
+
+    private void PopulatePlayers()
+    { 
+        playerListEntries = new Dictionary<int, int>();
+        int i = 0;
+        foreach (Player p in PhotonNetwork.PlayerList)
+        {
+            string ready = "";
+            object isPlayerReady;
+            if (p.CustomProperties.TryGetValue(Globals.PLAYER_READY, out isPlayerReady))
+                ready = ((bool)isPlayerReady)? "Ready!" : "";
+
+            AssignPlayer(i, p.NickName, ready);
+
+            playerListEntries.Add(p.ActorNumber, i);
+            i++;
+        }
+
+        startButtonObj.SetActive(CheckPlayersReady());
+    }
+
+    private void PlayerPropertiesCB(Player player, string ready)
+    {
+        int outVal;
+        if(playerListEntries.TryGetValue(player.ActorNumber, out outVal))
+        {
+            AssignPlayer(outVal, player.NickName, ready);
+        }
+    }
+
+    private void GetPlayersCB(bool joined, Player player)
+    {
+        if(joined)
+        {
+            // Add the new entry
+            string ready = "";
+            object isPlayerReady;
+            if (player.CustomProperties.TryGetValue(Globals.PLAYER_READY, out isPlayerReady))
+                ready = ((bool)isPlayerReady) ? "Ready!" : "";
+
+            int i = PhotonNetwork.PlayerList.Length;
+            AssignPlayer(i, player.NickName, ready);
+            playerListEntries.Add(player.ActorNumber, i);
+        }
+        else
+        {
+            // Remove this entry
+            PopulatePlayers();
+        }
+
+        // Re-check if we are supposed to be the master client to kick off the game!
+        startButtonObj.gameObject.SetActive(CheckPlayersReady());
+    }
+
+    private void AssignPlayer(int i, string nickName, string ready)
+    {
+        switch (i)
+        {
+            case 0:
+                {
+                    player1Name.text = nickName;
+                    player1Status.text = ready;
+                }
+                break;
+            case 1:
+                {
+                    player2Name.text = nickName;
+                    player2Status.text = ready;
+                }
+                break;
+            case 2:
+                {
+                    player3Name.text = nickName;
+                    player3Status.text = ready;
+                }
+                break;
+            case 3:
+                {
+                    player4Name.text = nickName;
+                    player4Status.text = ready;
+                }
+                break;
+        }
+    }
+
+    private bool CheckPlayersReady()
+    {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return false;
+        }
+
+        foreach (Player p in PhotonNetwork.PlayerList)
+        {
+            object isPlayerReady;
+            if (p.CustomProperties.TryGetValue(Globals.PLAYER_READY, out isPlayerReady))
+            {
+                if (!(bool)isPlayerReady)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
 
 }

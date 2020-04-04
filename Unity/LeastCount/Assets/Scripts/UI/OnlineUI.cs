@@ -155,6 +155,8 @@ public class OnlineUI : MonoBehaviour
         OnlineManager.Instance.SetPlayersCB(GetPlayersCB);
         OnlineManager.Instance.SetPlayerPropertiesCB(PlayerPropertiesCB);
 
+        roomNameLabel.text = PhotonNetwork.CurrentRoom.Name;
+
         PopulatePlayers();
     }
 
@@ -174,6 +176,8 @@ public class OnlineUI : MonoBehaviour
             playerListEntries.Add(p.ActorNumber, i);
             i++;
         }
+        for(int j=i; j<4; j++)
+            AssignPlayer(j, "", "");
 
         startButtonObj.SetActive(CheckPlayersReady());
     }
@@ -197,7 +201,7 @@ public class OnlineUI : MonoBehaviour
             if (player.CustomProperties.TryGetValue(Globals.PLAYER_READY, out isPlayerReady))
                 ready = ((bool)isPlayerReady) ? "Ready!" : "";
 
-            int i = PhotonNetwork.PlayerList.Length;
+            int i = playerListEntries.Count;
             AssignPlayer(i, player.NickName, ready);
             playerListEntries.Add(player.ActorNumber, i);
         }

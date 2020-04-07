@@ -23,7 +23,9 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
     private Action<bool, short, string> JoinRoomCB;
     private Action<bool, List<RoomInfo>> GetRoomsCB;
     private Action<bool, Player> GetPlayersCB;
-    private Action<Player, string> PlayerPropertiesCB;
+    private Action<Player, string, bool> PlayerPropertiesCB;
+
+
 
     // Use this for initialization
     public void Load()
@@ -55,9 +57,19 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
         GetPlayersCB = callback;
     }
 
-    public void SetPlayerPropertiesCB(Action<Player, string> callback)
+    public void SetPlayerPropertiesCB(Action<Player, string, bool> callback)
     {
         PlayerPropertiesCB = callback;
+    }
+
+    public bool IsOnlineGame()
+    {
+        return PhotonNetwork.CurrentRoom != null;
+    }
+
+    public bool IsMaster()
+    {
+        return PhotonNetwork.IsMasterClient;
     }
 
     public eConnectionState ConnectAs(string name)
@@ -200,7 +212,13 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
             {
                 ready = ((bool)isPlayerReady) ? "Ready!" : "";
             }
-            PlayerPropertiesCB(targetPlayer, ready);
+            bool started = false;
+            object hostStarted;
+            if (changedProps.TryGetValue(Globals.HOST_START, out hostStarted))
+            {
+                started = ((bool)hostStarted);
+            }
+            PlayerPropertiesCB(targetPlayer, ready, started);
         }
 
     }

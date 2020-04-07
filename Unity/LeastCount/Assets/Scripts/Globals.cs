@@ -66,4 +66,5 @@ public static class Globals
     public static readonly string[] PLAYER_PREFIXES = { PLAYER0_PREFIX, PLAYER1_PREFIX, PLAYER2_PREFIX, PLAYER3_PREFIX };
 
     public const string PLAYER_READY = "IsPlayerReady";
+    public const string HOST_START = "IsHostStarted";
 }

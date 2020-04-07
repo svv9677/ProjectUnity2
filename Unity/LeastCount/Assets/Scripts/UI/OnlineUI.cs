@@ -186,12 +186,20 @@ public class OnlineUI : MonoBehaviour
         startButtonObj.SetActive(CheckPlayersReady());
     }
 
-    private void PlayerPropertiesCB(Player player, string ready)
+    private void PlayerPropertiesCB(Player player, string ready, bool started)
     {
-        int outVal;
-        if(playerListEntries.TryGetValue(player.ActorNumber, out outVal))
+        if(!started)
         {
-            AssignPlayer(outVal, player.NickName, ready);
+            int outVal;
+            if (playerListEntries.TryGetValue(player.ActorNumber, out outVal))
+            {
+                AssignPlayer(outVal, player.NickName, ready);
+            }
+        }
+        else
+        {
+            // Start game!
+            CompilePlayersAndStartGame();
         }
     }
 
@@ -291,7 +299,18 @@ public class OnlineUI : MonoBehaviour
 
     public void OnClickStart()
     {
+        // We (host) set our custom property, so that all joiners will start as well
+        Hashtable props = new Hashtable() { { Globals.HOST_START, true } };
+        PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+    }
 
+    private void CompilePlayersAndStartGame()
+    {
+        int i = 0;
+        foreach (Player p in PhotonNetwork.PlayerList)
+        {
+            Debug.Log(string.Format("Player - Index: {0}, Actor: {1}, Name: {2}", i, p.ActorNumber, p.NickName));
+        }
     }
 
 

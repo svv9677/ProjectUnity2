@@ -1,26 +1,18 @@
 ﻿<Properties StartupConfiguration="{9562C9BD-53EE-3FF6-C8FF-9289A9E5C2BF}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Photon/PhotonUnityNetworking/Demos/DemoAsteroids/Scripts/Lobby/PlayerListEntry.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameModes/Puzzle.cs">
     <Files>
-      <File FileName="Assets/Scripts/Globals.cs" Line="68" Column="37" />
-      <File FileName="Assets/Scripts/GameModes/Puzzle.cs" Line="110" Column="41" />
-      <File FileName="Assets/Scripts/GameModes/AIPlayer.cs" Line="6" Column="1" />
-      <File FileName="Assets/Scripts/GameModes/InputPlayer.cs" Line="14" Column="32" />
-      <File FileName="Assets/Scripts/GameModes/Splash.cs" Line="81" Column="1" />
-      <File FileName="Assets/Scripts/Singletons/GameMode.cs" Line="81" Column="25" />
-      <File FileName="Assets/Scripts/GameModes/Online.cs" Line="27" Column="1" />
-      <File FileName="Assets/Scripts/UI/OnlineUI.cs" Line="220" Column="1" />
-      <File FileName="Assets/Scripts/Singletons/User.cs" Line="51" Column="16" />
+      <File FileName="Assets/Scripts/Globals.cs" Line="69" Column="35" />
+      <File FileName="Assets/Scripts/GameModes/Puzzle.cs" Line="104" Column="39" />
+      <File FileName="Assets/Scripts/GameModes/AIPlayer.cs" Line="264" Column="1" />
+      <File FileName="Assets/Scripts/Players/InputPlayer.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameModes/Online.cs" />
+      <File FileName="Assets/Scripts/UI/OnlineUI.cs" Line="169" Column="9" />
       <File FileName="Assets/Scripts/Singletons/DeckManager.cs" Line="314" Column="14" NotebookId="1" />
-      <File FileName="Assets/Scripts/UI/PuzzleUI.cs" Line="66" Column="39" NotebookId="1" />
-      <File FileName="Assets/Scripts/GameModes/Results.cs" Line="25" Column="6" NotebookId="1" />
-      <File FileName="Assets/Scripts/UI/ResultsItem.cs" Line="14" Column="1" NotebookId="1" />
-      <File FileName="Assets/Scripts/UI/OnlineItem.cs" Line="17" Column="55" NotebookId="1" />
-      <File FileName="Assets/Scripts/UI/ResultsUI.cs" Line="25" Column="1" NotebookId="1" />
+      <File FileName="Assets/Scripts/UI/PuzzleUI.cs" NotebookId="1" />
       <File FileName="Assets/Photon/PhotonUnityNetworking/Demos/DemoAsteroids/Scripts/Lobby/LobbyMainPanel.cs" Line="305" Column="21" NotebookId="1" />
-      <File FileName="Assets/Photon/PhotonUnityNetworking/Demos/DemoAsteroids/Scripts/Lobby/LobbyTopPanel.cs" Line="1" Column="1" NotebookId="1" />
-      <File FileName="Assets/Scripts/Singletons/OnlineManager.cs" Line="208" Column="15" NotebookId="1" />
-      <File FileName="Assets/Photon/PhotonUnityNetworking/Code/PhotonNetwork.cs" Line="2062" Column="120" NotebookId="1" />
-      <File FileName="Assets/Photon/PhotonUnityNetworking/Demos/DemoAsteroids/Scripts/Lobby/PlayerListEntry.cs" Line="1" Column="1" NotebookId="1" />
+      <File FileName="Assets/Photon/PhotonUnityNetworking/Demos/DemoAsteroids/Scripts/Lobby/LobbyTopPanel.cs" NotebookId="1" />
+      <File FileName="Assets/Scripts/Singletons/OnlineManager.cs" Line="201" Column="22" NotebookId="1" />
+      <File FileName="Assets/Scripts/Players/OnlinePlayer.cs" Line="56" Column="2" NotebookId="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -36,9 +28,7 @@
                   <Node name="Demos" expanded="True">
                     <Node name="DemoAsteroids" expanded="True">
                       <Node name="Scripts" expanded="True">
-                        <Node name="Lobby" expanded="True">
-                          <Node name="PlayerListEntry.cs" selected="True" />
-                        </Node>
+                        <Node name="Lobby" expanded="True" />
                       </Node>
                     </Node>
                   </Node>
@@ -46,7 +36,10 @@
               </Node>
               <Node name="Scripts" expanded="True">
                 <Node name="Core" expanded="True" />
-                <Node name="GameModes" expanded="True" />
+                <Node name="GameModes" expanded="True">
+                  <Node name="Puzzle.cs" selected="True" />
+                </Node>
+                <Node name="Players" expanded="True" />
                 <Node name="Singletons" expanded="True" />
                 <Node name="UI" expanded="True" />
                 <Node name="Utils" expanded="True" />
@@ -55,16 +48,11 @@
           </Node>
         </State>
       </Pad>
-      <Pad Id="MonoDevelop.Debugger.WatchPad">
-        <State>
-          <Value>GameMode.Instance.puzzle.MyPuzzleUI</Value>
-        </State>
-      </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="1e9e51c5-8f65-4ddc-b1f4-54d38722b51e" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="5dd1e5a9-4491-4c14-86c3-a7c11187b72f" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

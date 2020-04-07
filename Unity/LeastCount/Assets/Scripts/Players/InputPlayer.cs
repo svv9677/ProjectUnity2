@@ -89,14 +89,13 @@ public class InputPlayer : GamePlayer
 
     public void OnMultiTap(int tapCount)
     {
+#if UNITY_EDITOR
         if (tapCount == 4)
             ToggleDebugMenu();
         else if(tapCount >= 5)
             GameMode.Instance.SetMode(eMode.E_M_SPLASH);
+#endif
     }
-
-    // TODO:
-    //  - Pick multiple cards from used pile, if that's the case
 
     public void OnFingerTap(Lean.LeanFinger finger)
     {

@@ -13,6 +13,12 @@ public enum eConnectionState
     E_CS_NETWORK_ERROR,
 }
 
+public enum eMessage
+{
+    E_M_SHUFFLED_DECK,
+
+}
+
 public class OnlineManager : OnlineSingleton<OnlineManager>
 {
     public string ConnectionStatus = "";
@@ -24,8 +30,6 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
     private Action<bool, List<RoomInfo>> GetRoomsCB;
     private Action<bool, Player> GetPlayersCB;
     private Action<Player, string, bool> PlayerPropertiesCB;
-
-
 
     // Use this for initialization
     public void Load()
@@ -100,7 +104,6 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
         JoinRoomCB = callback;
         return PhotonNetwork.JoinRoom(roomName);
     }
-
 
     ////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////
@@ -225,4 +228,19 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
 
     #endregion
 
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    #region ONLINE MESSAGING
+
+    public void NetworkMessage(eMessage message, string param)
+    {
+        this.photonView.RPC("OnNetworkMessage", RpcTarget.All, message, param);
+    }
+
+    public void OnNetworkMessage(eMessage message, string param, PhotonMessageInfo info)
+    {
+        Debug.Log(String.Format("NETWORKMESSAGE: {0} sent {1} : {2}", info.Sender.NickName, message, param));
+    }
+
+    #endregion
 }

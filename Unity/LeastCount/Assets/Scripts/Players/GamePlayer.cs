@@ -6,6 +6,7 @@ using UnityEngine;
 public class GamePlayer : MonoBehaviour
 {
     public int PlayerIndex;
+    public int ActorIndex;
 
     protected bool MyTurn = false;
 

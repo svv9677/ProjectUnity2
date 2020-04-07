@@ -1,18 +1,21 @@
 ﻿<Properties StartupConfiguration="{9562C9BD-53EE-3FF6-C8FF-9289A9E5C2BF}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameModes/Puzzle.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Utils/MiniJSON.cs">
     <Files>
       <File FileName="Assets/Scripts/Globals.cs" Line="69" Column="35" />
-      <File FileName="Assets/Scripts/GameModes/Puzzle.cs" Line="104" Column="39" />
+      <File FileName="Assets/Scripts/GameModes/Puzzle.cs" Line="210" Column="16" />
       <File FileName="Assets/Scripts/GameModes/AIPlayer.cs" Line="264" Column="1" />
       <File FileName="Assets/Scripts/Players/InputPlayer.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/GameModes/Online.cs" />
-      <File FileName="Assets/Scripts/UI/OnlineUI.cs" Line="169" Column="9" />
-      <File FileName="Assets/Scripts/Singletons/DeckManager.cs" Line="314" Column="14" NotebookId="1" />
+      <File FileName="Assets/Scripts/GameModes/Online.cs" Line="27" Column="1" />
+      <File FileName="Assets/Scripts/UI/OnlineUI.cs" Line="8" Column="1" />
+      <File FileName="Assets/Scripts/Players/GamePlayer.cs" Line="9" Column="27" />
+      <File FileName="Assets/Scripts/Singletons/DeckManager.cs" Line="52" Column="12" NotebookId="1" />
       <File FileName="Assets/Scripts/UI/PuzzleUI.cs" NotebookId="1" />
       <File FileName="Assets/Photon/PhotonUnityNetworking/Demos/DemoAsteroids/Scripts/Lobby/LobbyMainPanel.cs" Line="305" Column="21" NotebookId="1" />
       <File FileName="Assets/Photon/PhotonUnityNetworking/Demos/DemoAsteroids/Scripts/Lobby/LobbyTopPanel.cs" NotebookId="1" />
-      <File FileName="Assets/Scripts/Singletons/OnlineManager.cs" Line="201" Column="22" NotebookId="1" />
+      <File FileName="Assets/Scripts/Singletons/OnlineManager.cs" Line="237" Column="88" NotebookId="1" />
       <File FileName="Assets/Scripts/Players/OnlinePlayer.cs" Line="56" Column="2" NotebookId="1" />
+      <File FileName="Assets/Scripts/GameModes/Splash.cs" Line="77" Column="35" NotebookId="1" />
+      <File FileName="Assets/Scripts/Utils/MiniJSON.cs" Line="401" Column="24" NotebookId="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -36,16 +39,23 @@
               </Node>
               <Node name="Scripts" expanded="True">
                 <Node name="Core" expanded="True" />
-                <Node name="GameModes" expanded="True">
-                  <Node name="Puzzle.cs" selected="True" />
-                </Node>
+                <Node name="GameModes" expanded="True" />
                 <Node name="Players" expanded="True" />
                 <Node name="Singletons" expanded="True" />
                 <Node name="UI" expanded="True" />
-                <Node name="Utils" expanded="True" />
+                <Node name="Utils" expanded="True">
+                  <Node name="MiniJSON.cs" selected="True" />
+                </Node>
               </Node>
             </Node>
           </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State>
+          <Value>GameMode.Instance.puzzle.MyPuzzleUI</Value>
+          <Value>p</Value>
+          <Value>this.mDeck</Value>
         </State>
       </Pad>
     </Pads>
@@ -54,7 +64,10 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="5dd1e5a9-4491-4c14-86c3-a7c11187b72f" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/rao/Git/ProjectUnity2/Unity/LeastCount/Assets/Scripts/Singletons/DeckManager.cs" relfile="Assets/Scripts/Singletons/DeckManager.cs" line="326" column="1" />
+      <Breakpoint file="/Users/rao/Git/ProjectUnity2/Unity/LeastCount/Assets/Scripts/GameModes/Puzzle.cs" relfile="Assets/Scripts/GameModes/Puzzle.cs" line="198" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
 </Properties>

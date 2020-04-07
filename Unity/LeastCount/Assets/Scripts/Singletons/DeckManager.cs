@@ -56,7 +56,156 @@ public class Card
         this.mType = (eCardType) _type;
         this.mNumber = (eCardNumber) _number;
         this.mCardObj = null;
+        this.mCardUI = null;
+        this.mPrefix = "";
         this.mMoveDirty = false;
+        this.FormatName();
+    }
+
+    public Card(string cardStr, int set)
+    {
+        this.mSet = set;
+        string[] toks = cardStr.Split('_');
+
+        if (toks[0] == "Black")
+            this.mColor = eCardColor.E_CC_BLACK;
+        else
+            this.mColor = eCardColor.E_CC_RED;
+
+        switch(toks[1])
+        {
+            case "Club":
+                mType = eCardType.E_CT_CLUB;
+                break;
+            case "Diamond":
+                mType = eCardType.E_CT_DIAMOND;
+                break;
+            case "Heart":
+                mType = eCardType.E_CT_HEART;
+                break;
+            case "Spade":
+                mType = eCardType.E_CT_SPADE;
+                break;
+        }
+
+        switch(toks[2])
+        {
+            case "10":
+                mNumber = eCardNumber.E_CN_10;
+                break;
+            case "2":
+                mNumber = eCardNumber.E_CN_2;
+                break;
+            case "3":
+                mNumber = eCardNumber.E_CN_3;
+                break;
+            case "4":
+                mNumber = eCardNumber.E_CN_4;
+                break;
+            case "5":
+                mNumber = eCardNumber.E_CN_5;
+                break;
+            case "6":
+                mNumber = eCardNumber.E_CN_6;
+                break;
+            case "7":
+                mNumber = eCardNumber.E_CN_7;
+                break;
+            case "8":
+                mNumber = eCardNumber.E_CN_8;
+                break;
+            case "9":
+                mNumber = eCardNumber.E_CN_9;
+                break;
+            case "J":
+                mNumber = eCardNumber.E_CN_J;
+                break;
+            case "Q":
+                mNumber = eCardNumber.E_CN_Q;
+                break;
+            case "K":
+                mNumber = eCardNumber.E_CN_K;
+                break;
+            case "A":
+                mNumber = eCardNumber.E_CN_A;
+                break;
+        }
+
+        this.mCardObj = null;
+        this.mCardUI = null;
+        this.mPrefix = "";
+        this.mMoveDirty = false;
+        this.FormatName();
+    }
+
+    private void FormatName()
+    {
+        string retVal = "";
+        if (mColor == eCardColor.E_CC_BLACK)
+            retVal += "Black_";
+        else
+            retVal += "Red_";
+
+        switch (mType)
+        {
+            case eCardType.E_CT_CLUB:
+                retVal += "Club_";
+                break;
+            case eCardType.E_CT_DIAMOND:
+                retVal += "Diamond_";
+                break;
+            case eCardType.E_CT_HEART:
+                retVal += "Heart_";
+                break;
+            case eCardType.E_CT_SPADE:
+                retVal += "Spade_";
+                break;
+        }
+
+        switch (mNumber)
+        {
+            case eCardNumber.E_CN_10:
+                retVal += "10";
+                break;
+            case eCardNumber.E_CN_2:
+                retVal += "2";
+                break;
+            case eCardNumber.E_CN_3:
+                retVal += "3";
+                break;
+            case eCardNumber.E_CN_4:
+                retVal += "4";
+                break;
+            case eCardNumber.E_CN_5:
+                retVal += "5";
+                break;
+            case eCardNumber.E_CN_6:
+                retVal += "6";
+                break;
+            case eCardNumber.E_CN_7:
+                retVal += "7";
+                break;
+            case eCardNumber.E_CN_8:
+                retVal += "8";
+                break;
+            case eCardNumber.E_CN_9:
+                retVal += "9";
+                break;
+            case eCardNumber.E_CN_J:
+                retVal += "J";
+                break;
+            case eCardNumber.E_CN_Q:
+                retVal += "Q";
+                break;
+            case eCardNumber.E_CN_K:
+                retVal += "K";
+                break;
+            case eCardNumber.E_CN_A:
+                retVal += "A";
+                break;
+        }
+
+        mName = retVal;
     }
 
     public void Destroy()
@@ -92,7 +241,6 @@ public class Card
         if (defaultName == "")
             defaultName = Globals.PLAYER_PREFIXES[0];
 
-        this.FormatName();
         Sprite sp = Resources.Load<Sprite>("Textures/Cards/" + this.ToString());
 
         mCardObj = GameObject.Instantiate(Resources.Load("Prefabs/CardUI")) as GameObject;
@@ -210,76 +358,6 @@ public class Card
     {
         return mName;
     }
-
-    private void FormatName()
-    { 
-        string retVal = "";
-        if(mColor == eCardColor.E_CC_BLACK)
-            retVal += "Black_";
-        else
-            retVal += "Red_";
-
-        switch(mType)
-        {
-        case eCardType.E_CT_CLUB:
-            retVal += "Club_";
-            break;
-        case eCardType.E_CT_DIAMOND:
-            retVal += "Diamond_";
-            break;
-        case eCardType.E_CT_HEART:
-            retVal += "Heart_";
-            break;
-        case eCardType.E_CT_SPADE:
-            retVal += "Spade_";
-            break;
-        }
-
-        switch(mNumber)
-        {
-        case eCardNumber.E_CN_10:
-            retVal += "10";
-            break;
-        case eCardNumber.E_CN_2:
-            retVal += "2";
-            break;
-        case eCardNumber.E_CN_3:
-            retVal += "3";
-            break;
-        case eCardNumber.E_CN_4:
-            retVal += "4";
-            break;
-        case eCardNumber.E_CN_5:
-            retVal += "5";
-            break;
-        case eCardNumber.E_CN_6:
-            retVal += "6";
-            break;
-        case eCardNumber.E_CN_7:
-            retVal += "7";
-            break;
-        case eCardNumber.E_CN_8:
-            retVal += "8";
-            break;
-        case eCardNumber.E_CN_9:
-            retVal += "9";
-            break;
-        case eCardNumber.E_CN_J:
-            retVal += "J";
-            break;
-        case eCardNumber.E_CN_Q:
-            retVal += "Q";
-            break;
-        case eCardNumber.E_CN_K:
-            retVal += "K";
-            break;
-        case eCardNumber.E_CN_A:
-            retVal += "A";
-            break;
-        }
-
-        mName = retVal;
-    }
 }
 
 public class DeckManager : Singleton<DeckManager>
@@ -321,8 +399,23 @@ public class DeckManager : Singleton<DeckManager>
         base.Destroy();
     }
 
-    // Update is called once per frame
-    void Update ()
+    public string DeckAsString()
     {
+        return MiniJSON.Json.Serialize(mDeck);
+    }
+
+    public void DeckFromString(string deckstr)
+    {
+        mDeck.Clear();
+        List<string> deckList = (List<string>)MiniJSON.Json.Deserialize(deckstr);
+        List<string> deckSet = new List<string>();
+        foreach(string str in deckList)
+        {
+            int set = 0;
+            if (deckSet.Contains(str))
+                set = 1;
+            Card card = new Card(str, set);
+            mDeck.Add(card);
+        }
     }
 }

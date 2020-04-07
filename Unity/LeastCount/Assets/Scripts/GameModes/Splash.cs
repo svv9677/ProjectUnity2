@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using System.Collections.Generic;
 
 public class Splash : Mode {
 
@@ -38,8 +38,8 @@ public class Splash : Mode {
 		bool hideFlag = (bool)param;
 
 		this.SetVisible (hideFlag);
-		if(!hideFlag)
-			GameMode.Instance.SetMode(this.nextMode);
+		if (!hideFlag)
+            GameMode.Instance.SetMode(this.nextMode);
 	}
 
 	protected void SetVisible(bool hideFlags)
@@ -72,18 +72,18 @@ public class Splash : Mode {
 
 	public void OnStartSingleplayer()
 	{
-		string finalName = nameInput.text.Trim();
-		if (finalName == "")
-		{
-			Globals.ShowToast("Please enter a valid name", 30);
-			return;
-		}
-		if (User.Instance.Save(finalName, false))
-		{
-			this.nextMode = eMode.E_M_PUZZLE;
-			this.StartTween(true, 1.0f);
-		}
-	}
+        string finalName = nameInput.text.Trim();
+        if (finalName == "")
+        {
+            Globals.ShowToast("Please enter a valid name", 30);
+            return;
+        }
+        if (User.Instance.Save(finalName, false))
+        {
+            this.nextMode = eMode.E_M_PUZZLE;
+            this.StartTween(true, 1.0f);
+        }
+    }
 
 	public void OnStartMultiplayer()
 	{

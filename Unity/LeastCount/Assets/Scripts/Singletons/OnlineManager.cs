@@ -237,6 +237,7 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
         this.photonView.RPC("OnNetworkMessage", RpcTarget.All, message, param);
     }
 
+    [PunRPC]
     public void OnNetworkMessage(eMessage message, string param, PhotonMessageInfo info)
     {
         Debug.Log(String.Format("NETWORKMESSAGE: {0} sent {1} : {2}", info.Sender.NickName, message, param));

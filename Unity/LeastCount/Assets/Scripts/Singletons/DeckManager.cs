@@ -407,10 +407,11 @@ public class DeckManager : Singleton<DeckManager>
     public void DeckFromString(string deckstr)
     {
         mDeck.Clear();
-        List<string> deckList = (List<string>)MiniJSON.Json.Deserialize(deckstr);
+        List<object> deckobjs = (List<object>)MiniJSON.Json.Deserialize(deckstr);
         List<string> deckSet = new List<string>();
-        foreach(string str in deckList)
+        foreach(object obj in deckobjs)
         {
+            string str = (string)obj;
             int set = 0;
             if (deckSet.Contains(str))
                 set = 1;

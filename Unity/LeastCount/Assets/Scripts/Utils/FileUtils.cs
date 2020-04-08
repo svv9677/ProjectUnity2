@@ -9,24 +9,24 @@ public class FileUtils : Singleton<FileUtils> {
 	
 	}
 	
-	public T GetJsonAsset<T>(string FilePath)
-	{
-		string appliedFilePath = GetStreamingAssetsPath(FilePath);
+	//public T GetJsonAsset<T>(string FilePath)
+	//{
+	//	string appliedFilePath = GetStreamingAssetsPath(FilePath);
 		
-		string json = "";
-		if(appliedFilePath.Contains("://"))
-		{
-			json = getJsonTextFromWWW(appliedFilePath);
-		}
-		else
-		{
-			json = File.ReadAllText(appliedFilePath);
-		}
+	//	string json = "";
+	//	if(appliedFilePath.Contains("://"))
+	//	{
+	//		json = getJsonTextFromWWW(appliedFilePath);
+	//	}
+	//	else
+	//	{
+	//		json = File.ReadAllText(appliedFilePath);
+	//	}
 		
-		T des = (T)MiniJSON.Json.Deserialize(json);
+	//	T des = (T)MiniJSON.Json.Deserialize(json);
 		
-		return des;
-	}
+	//	return des;
+	//}
 
 	public string GetStreamingAssetsPath(string fname)
 	{
@@ -52,15 +52,15 @@ public class FileUtils : Singleton<FileUtils> {
 		return Application.streamingAssetsPath;
 	}
 	
-	public static string getJsonTextFromWWW(string filePath)
-	{
-		WWW www = null;
-		www = new WWW(filePath);
+	//public static string getJsonTextFromWWW(string filePath)
+	//{
+	//	WWW www = null;
+	//	www = new WWW(filePath);
 		
-		while (www.isDone == false) {
-			// do nothing
-		}
+	//	while (www.isDone == false) {
+	//		// do nothing
+	//	}
 		
-		return www.text;
-	}
+	//	return www.text;
+	//}
 }

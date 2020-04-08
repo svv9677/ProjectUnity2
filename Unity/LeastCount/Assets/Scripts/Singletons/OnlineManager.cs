@@ -230,7 +230,7 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
 
     ////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////
-    #region ONLINE MESSAGING
+    #region ONLINE NETWORKING
 
     public void NetworkMessage(eMessage message, string param)
     {
@@ -240,7 +240,20 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
     [PunRPC]
     public void OnNetworkMessage(eMessage message, string param, PhotonMessageInfo info)
     {
-        Debug.Log(String.Format("NETWORKMESSAGE: {0} sent {1} : {2}", info.Sender.NickName, message, param));
+        switch(message)
+        {
+            case eMessage.E_M_SHUFFLED_DECK:
+                {
+                    // Load the shuffled deck
+                    DeckManager.Instance.DeckFromString(param);
+                    // Set puzzle state to distribute cards and move ahead!
+                    GameMode.Instance.puzzle.PuzzleState = ePuzzleState.E_PS_DISTRIBUTE_CARDS;
+                }
+                break;
+            default:
+                Debug.Log(String.Format("NETWORKMESSAGE: {0} sent {1} : {2}", info.Sender.NickName, message, param));
+                break;
+        }
     }
 
     #endregion

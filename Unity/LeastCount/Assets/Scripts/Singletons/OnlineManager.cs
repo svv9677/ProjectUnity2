@@ -232,9 +232,9 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
     ////////////////////////////////////////////////////////////////////////////////////////////
     #region ONLINE NETWORKING
 
-    public void NetworkMessage(eMessage message, string param)
+    public void NetworkMessage(eMessage message, string param, RpcTarget target = RpcTarget.All)
     {
-        this.photonView.RPC("OnNetworkMessage", RpcTarget.All, message, param);
+        this.photonView.RPC("OnNetworkMessage", target, message, param);
     }
 
     [PunRPC]

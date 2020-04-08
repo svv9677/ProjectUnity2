@@ -195,7 +195,7 @@ public class Puzzle : Mode {
                 // set to next state
                 this.PuzzleState = ePuzzleState.E_PS_DISTRIBUTE_CARDS;
 
-                OnlineManager.Instance.NetworkMessage(eMessage.E_M_SHUFFLED_DECK, DeckManager.Instance.DeckAsString());
+                OnlineManager.Instance.NetworkMessage(eMessage.E_M_SHUFFLED_DECK, DeckManager.Instance.DeckAsString(), RpcTarget.Others);
             }
             // else, we need to wait to hear about it from the OnlineManager
             break;

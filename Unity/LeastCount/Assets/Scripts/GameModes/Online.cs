@@ -15,7 +15,7 @@ public class Online : Mode
 
     public override void ExitMode()
     {
-
+        MyOnlineUI.gameObject.SetActive(false);
         base.ExitMode();
     }
 

@@ -306,13 +306,11 @@ public class OnlineUI : MonoBehaviour
 
     private void CompilePlayersAndStartGame()
     {
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+        PhotonNetwork.CurrentRoom.IsVisible = false;
+
         GameMode.Instance.SetMode(eMode.E_M_PUZZLE);
     }
-        //int i = 0;
-        //foreach (Player p in PhotonNetwork.PlayerList)
-        //{
-        //    Debug.Log(string.Format("Player - Index: {0}, Actor: {1}, Name: {2}", i, p.ActorNumber, p.NickName));
-        //}
 
 
 

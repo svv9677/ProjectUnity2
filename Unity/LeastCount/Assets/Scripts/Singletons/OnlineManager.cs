@@ -13,12 +13,6 @@ public enum eConnectionState
     E_CS_NETWORK_ERROR,
 }
 
-public enum eMessage
-{
-    E_M_SHUFFLED_DECK,
-
-}
-
 public class OnlineManager : OnlineSingleton<OnlineManager>
 {
     public string ConnectionStatus = "";
@@ -250,6 +244,11 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
                     GameMode.Instance.puzzle.PuzzleState = ePuzzleState.E_PS_DISTRIBUTE_CARDS;
                 }
                 break;
+            case eMessage.E_M_PLAYER_ORDER:
+                {
+                    Debug.Log(String.Format("NETWORKMESSAGE: {0} sent {1} : {2}", info.Sender.NickName, message, param));
+                }
+                break;
             default:
                 Debug.Log(String.Format("NETWORKMESSAGE: {0} sent {1} : {2}", info.Sender.NickName, message, param));
                 break;
@@ -258,3 +257,11 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
 
     #endregion
 }
+
+
+public enum eMessage
+{
+    E_M_SHUFFLED_DECK,
+    E_M_PLAYER_ORDER,
+}
+

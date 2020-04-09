@@ -111,8 +111,30 @@ public class Puzzle : Mode {
             // 7 cards per player as per rules
             this.CardsToDistribute = Globals.gCardsToDistribute;
 
+            int[] netMsg = new int[] { };
             this.Players = new List<GamePlayer>();
-            if(OnlineManager.Instance.IsOnlineGame())
+            if(!OnlineManager.Instance.IsOnlineGame())
+            {
+                for (int i = 0; i < this.NumPlayers; i++)
+                {
+                    GameObject obj = new GameObject();
+                    if (i == 0)
+                    {
+                        InputPlayer plyrInst = obj.AddComponent<InputPlayer>();
+                        plyrInst.PlayerIndex = i;
+                        this.Players.Add(plyrInst);
+                    }
+                    else
+                    {
+                        AIPlayer plyrInst = obj.AddComponent<AIPlayer>();
+                        plyrInst.PlayerIndex = i;
+                        this.Players.Add(plyrInst);
+                    }
+                }
+                this.TurnCount = 0;
+                this.PuzzleState = ePuzzleState.E_PS_SHUFFLE_CARDS;
+            }
+            else if (OnlineManager.Instance.IsMaster())
             {
                 int count = 0;
                 GameObject obj = new GameObject();
@@ -125,6 +147,7 @@ public class Puzzle : Mode {
                         plyrInst.PlayerIndex = count;
                         plyrInst.ActorIndex = p.ActorNumber;
                         this.Players.Add(plyrInst);
+                        netMsg[count] = p.ActorNumber;
                         count++;
                         break;
                     }
@@ -140,6 +163,7 @@ public class Puzzle : Mode {
                         plyrInst.PlayerIndex = count;
                         plyrInst.ActorIndex = p.ActorNumber;
                         this.Players.Add(plyrInst);
+                        netMsg[count] = p.ActorNumber;
                         count++;
                     }
                 }
@@ -151,32 +175,15 @@ public class Puzzle : Mode {
                     plyrInst.PlayerIndex = i;
                     plyrInst.ActorIndex = -1; // -1 implies not online
                     this.Players.Add(plyrInst);
+                    netMsg[i] = -1;
                 }
-            }
-            else
-            {
-                for (int i = 0; i < this.NumPlayers; i++)
-                {
-                    GameObject obj = new GameObject();
-                    //TODO: Get the player indices from match making and instantiate appropriate players
-                    // InputPlayer, AIPlayer or RemotePlayer
-                    if (i == 0)
-                    {
-                        InputPlayer plyrInst = obj.AddComponent<InputPlayer>();
-                        plyrInst.PlayerIndex = i;
-                        this.Players.Add(plyrInst);
-                    }
-                    else
-                    {
-                        AIPlayer plyrInst = obj.AddComponent<AIPlayer>();
-                        plyrInst.PlayerIndex = i;
-                        this.Players.Add(plyrInst);
-                    }
-                }
+
+                // Send the sequence of players to everyone, so they get same set of cards after shuffle
+                OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ORDER, netMsg.ToString(), RpcTarget.Others);
+                this.TurnCount = 0;
+                this.PuzzleState = ePuzzleState.E_PS_SHUFFLE_CARDS;
             }
 
-            this.TurnCount = 0;
-            this.PuzzleState = ePuzzleState.E_PS_SHUFFLE_CARDS;
             break;
         case ePuzzleState.E_PS_SHUFFLE_CARDS:
             // If not an online game, let's shuffle the cards

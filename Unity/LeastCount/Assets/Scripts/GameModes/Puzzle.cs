@@ -111,7 +111,7 @@ public class Puzzle : Mode {
             // 7 cards per player as per rules
             this.CardsToDistribute = Globals.gCardsToDistribute;
 
-            int[] netMsg = new int[] { };
+            int[] netMsg = { -1, -1, -1, -1 };
             this.Players = new List<GamePlayer>();
             if(!OnlineManager.Instance.IsOnlineGame())
             {

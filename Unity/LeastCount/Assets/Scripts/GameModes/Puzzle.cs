@@ -163,11 +163,12 @@ public class Puzzle : Mode {
                         int[] netMsg = { -1, -1, -1, -1 };
 
                         int count = 0;
-                        GameObject obj = new GameObject();
+                        GameObject obj;
                         foreach (Player p in PhotonNetwork.PlayerList)
                         {
                             if (p.IsLocal)
                             {
+                                obj = new GameObject();
                                 // Set local player as index 0
                                 InputPlayer plyrInst = obj.AddComponent<InputPlayer>();
                                 plyrInst.PlayerIndex = count;
@@ -180,11 +181,11 @@ public class Puzzle : Mode {
                             }
                         }
                         // Now instantiate other online players
-                        obj = new GameObject();
                         foreach (Player p in PhotonNetwork.PlayerList)
                         {
                             if (!p.IsLocal)
                             {
+                                obj = new GameObject();
                                 // Set local player as index 0
                                 OnlinePlayer plyrInst = obj.AddComponent<OnlinePlayer>();
                                 plyrInst.PlayerIndex = count;
@@ -207,6 +208,7 @@ public class Puzzle : Mode {
                             this.Players.Add(plyrInst);
                             netMsg[i] = plyrInst.ActorIndex;
                             ai_index++;
+                            count++;
                         }
 
                         // Send the sequence of players to everyone, so they get same set of cards after shuffle
@@ -269,11 +271,12 @@ public class Puzzle : Mode {
         }
 
         int count = 0;
-        GameObject obj = new GameObject();
+        GameObject obj;
         foreach (Player p in PhotonNetwork.PlayerList)
         {
             if (p.IsLocal)
             {
+                obj = new GameObject();
                 // Set local player as index 0
                 InputPlayer plyrInst = obj.AddComponent<InputPlayer>();
                 plyrInst.PlayerIndex = count;
@@ -285,11 +288,11 @@ public class Puzzle : Mode {
             }
         }
         // Now instantiate other online players
-        obj = new GameObject();
         foreach (Player p in PhotonNetwork.PlayerList)
         {
             if (!p.IsLocal)
             {
+                obj = new GameObject();
                 // Set local player as index 0
                 OnlinePlayer plyrInst = obj.AddComponent<OnlinePlayer>();
                 plyrInst.PlayerIndex = count;
@@ -302,14 +305,15 @@ public class Puzzle : Mode {
         // Now instantiate and fill remaining spots with AI Players
         for (int i = count; i < this.NumPlayers; i++)
         {
+            obj = new GameObject();
             int ai_index = indices[count] / Globals.AI_PLAYER_INDEX_MULTIPLIER;
             ai_index--;
-            obj = new GameObject();
             AIPlayer plyrInst = obj.AddComponent<AIPlayer>();
             plyrInst.PlayerIndex = i;
             plyrInst.ActorIndex = indices[count];
             plyrInst.NickName = Globals.AI_PLAYER_NAMES[ai_index];
             this.Players.Add(plyrInst);
+            count++;
         }
 
         // Give 'n' cards to each player

@@ -28,6 +28,12 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
     // Use this for initialization
     public void Load()
     {
+        ConnectCB = null;
+        CreateRoomCB = null;
+        JoinRoomCB = null;
+        GetRoomsCB = null;
+        GetPlayersCB = null;
+        PlayerPropertiesCB = null;
     }
 
     public override void Destroy()
@@ -89,6 +95,8 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
     public void Disconnect()
     {
         PhotonNetwork.Disconnect();
+        // Reset
+        Load();
     }
 
     public bool CreateRoom(string roomName, Action<bool, short, string> callback)
@@ -139,6 +147,10 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
 
     public override void OnLeftLobby()
     {
+        if (!PhotonNetwork.InLobby)
+        {
+            PhotonNetwork.JoinLobby();
+        }
         Debug.Log("OnLeftLobby");
     }
 
@@ -157,6 +169,10 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
         {
             JoinRoomCB(false, returnCode, message);
             JoinRoomCB = null;
+        }
+        if (!PhotonNetwork.InLobby)
+        {
+            PhotonNetwork.JoinLobby();
         }
     }
 
@@ -181,6 +197,10 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
 
     public override void OnLeftRoom()
     {
+        if (!PhotonNetwork.InLobby)
+        {
+            PhotonNetwork.JoinLobby();
+        }
         Debug.Log("OnLeftRoom");
     }
 

@@ -38,8 +38,14 @@ public class OnlineUI : MonoBehaviour
     {
         roomListEntries = new Dictionary<string, GameObject>();
 
+        OnlineManager.Instance.Load();
+
         OnlineManager.Instance.SetOnConnectedCB(OnConnectedCB);
         OnlineManager.Instance.SetRoomsCB(GetRoomsCB);
+
+        OnlineManager.Instance.SetPlayersCB(GetPlayersCB);
+        OnlineManager.Instance.SetPlayerPropertiesCB(PlayerPropertiesCB);
+
         LobbyParent.SetActive(true);
         RoomParent.SetActive(false);
         isPlayerReady = false;
@@ -54,16 +60,16 @@ public class OnlineUI : MonoBehaviour
     {
         if(!success)
         {
-            Globals.ShowToast("Failed to coonect to Servers");
+            Globals.ShowToast("Failed to connect to Servers");
             return;
         }
     }
 
     private void GetRoomsCB(bool success, List<RoomInfo> roomList)
     {
-        foreach(GameObject entry in roomListEntries.Values)
+        foreach(Transform child in scrollContent.transform)
         {
-            Destroy(entry.gameObject);
+            Destroy(child.gameObject);
         }
         roomListEntries.Clear();
 
@@ -156,12 +162,15 @@ public class OnlineUI : MonoBehaviour
         LobbyParent.SetActive(false);
         RoomParent.SetActive(true);
 
-        OnlineManager.Instance.SetPlayersCB(GetPlayersCB);
-        OnlineManager.Instance.SetPlayerPropertiesCB(PlayerPropertiesCB);
-
         roomNameLabel.text = PhotonNetwork.CurrentRoom.Name;
 
         PopulatePlayers();
+    }
+
+    public void SwitchToLobby()
+    {
+        LobbyParent.SetActive(true);
+        RoomParent.SetActive(false);
     }
 
     private void PopulatePlayers()

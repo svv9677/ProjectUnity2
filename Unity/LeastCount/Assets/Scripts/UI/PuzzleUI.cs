@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class PuzzleUI : MonoBehaviour
 {
-
     public GameObject Player0Parent;
     public GameObject Player1Parent;
     public GameObject Player2Parent;
@@ -17,6 +16,13 @@ public class PuzzleUI : MonoBehaviour
     public Text AIPlayer1Name;
     public Text AIPlayer2Name;
     public Text AIPlayer3Name;
+
+    public void UpdatePlayerNames(string name1, string name2, string name3)
+    {
+        AIPlayer1Name.text = name1;
+        AIPlayer2Name.text = name2;
+        AIPlayer3Name.text = name3;
+    }
 
     public void UpdateDistributionDisplays(Puzzle puzzle, bool init=false)
     {

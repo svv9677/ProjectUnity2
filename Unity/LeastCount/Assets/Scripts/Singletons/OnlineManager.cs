@@ -228,6 +228,9 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
 
     public void NetworkMessage(eMessage message, string param, RpcTarget target = RpcTarget.All)
     {
+        if (!IsOnlineGame())
+            return;
+
         this.photonView.RPC("OnNetworkMessage", target, message, param);
     }
 
@@ -238,15 +241,14 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
         {
             case eMessage.E_M_SHUFFLED_DECK:
                 {
-                    // Load the shuffled deck
-                    DeckManager.Instance.DeckFromString(param);
-                    // Set puzzle state to distribute cards and move ahead!
-                    GameMode.Instance.puzzle.PuzzleState = ePuzzleState.E_PS_DISTRIBUTE_CARDS;
+                    // Load in-coming deck 
+                    GameMode.Instance.puzzle.LoadDeckFromOnine(param);
                 }
                 break;
             case eMessage.E_M_PLAYER_ORDER:
                 {
-                    Debug.Log(String.Format("NETWORKMESSAGE: {0} sent {1} : {2}", info.Sender.NickName, message, param));
+                    // Initialize in-coming players
+                    GameMode.Instance.puzzle.InitPlayersFromOnline(param);
                 }
                 break;
             default:

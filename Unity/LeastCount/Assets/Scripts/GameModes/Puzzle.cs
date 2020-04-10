@@ -7,8 +7,8 @@ using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public enum ePuzzleState {
-	E_PS_SELECT_PLAYERS = 0,
     E_PS_SHUFFLE_CARDS,
+    E_PS_SELECT_PLAYERS,
     E_PS_DISTRIBUTE_CARDS,
     E_PS_PLAYER_TURN,
 
@@ -88,7 +88,7 @@ public class Puzzle : Mode {
                 card.Destroy();
         }
 
-        this.PuzzleState = ePuzzleState.E_PS_SELECT_PLAYERS;
+        this.PuzzleState = ePuzzleState.E_PS_SHUFFLE_CARDS;
         this.MyPuzzleUI = this.gameObject.GetComponent<PuzzleUI>();
 		this.SetVisible (true);
 
@@ -103,143 +103,257 @@ public class Puzzle : Mode {
 	// Update is called once per frame
 	void Update () 
 	{
-		switch(this.PuzzleState)
+        bool online = OnlineManager.Instance.IsOnlineGame();
+        bool master = OnlineManager.Instance.IsMaster();
+
+        switch (this.PuzzleState)
 		{
-        case ePuzzleState.E_PS_SELECT_PLAYERS:
-            // For now default to globals' min player count
-            this.NumPlayers = Globals.gMinimumPlayers;
-            // 7 cards per player as per rules
-            this.CardsToDistribute = Globals.gCardsToDistribute;
-
-            int[] netMsg = { -1, -1, -1, -1 };
-            this.Players = new List<GamePlayer>();
-            if(!OnlineManager.Instance.IsOnlineGame())
-            {
-                for (int i = 0; i < this.NumPlayers; i++)
+            case ePuzzleState.E_PS_SHUFFLE_CARDS:
                 {
-                    GameObject obj = new GameObject();
-                    if (i == 0)
+                    // If not an online game, let's shuffle the cards
+                    // else, if we are host, shuffle AND let everyone know the new deck
+                    if (!online || (online && master))
                     {
-                        InputPlayer plyrInst = obj.AddComponent<InputPlayer>();
-                        plyrInst.PlayerIndex = i;
-                        this.Players.Add(plyrInst);
+                        // shuffle the deck first!
+                        DeckManager.Instance.mDeck.Shuffle();
+                        // set to next state
+                        this.PuzzleState = ePuzzleState.E_PS_SELECT_PLAYERS;
+
+                        OnlineManager.Instance.NetworkMessage(eMessage.E_M_SHUFFLED_DECK, DeckManager.Instance.DeckAsString(), RpcTarget.Others);
                     }
-                    else
+                    // else, we need to wait to hear about it from the OnlineManager
+                }
+                break;
+            case ePuzzleState.E_PS_SELECT_PLAYERS:
+                {
+                    // For now default to globals' min player count
+                    this.NumPlayers = Globals.gMinimumPlayers;
+                    // 7 cards per player as per rules
+                    this.CardsToDistribute = Globals.gCardsToDistribute;
+
+                    this.Players = new List<GamePlayer>();
+
+                    if(!online)
                     {
-                        AIPlayer plyrInst = obj.AddComponent<AIPlayer>();
-                        plyrInst.PlayerIndex = i;
-                        this.Players.Add(plyrInst);
+                        for (int i = 0; i < this.NumPlayers; i++)
+                        {
+                            GameObject obj = new GameObject();
+                            // input player is at base 0
+                            if (i == 0)
+                            {
+                                InputPlayer plyrInst = obj.AddComponent<InputPlayer>();
+                                plyrInst.PlayerIndex = i;
+                                plyrInst.NickName = User.Instance.Name;
+                                this.Players.Add(plyrInst);
+                            }
+                            // rest take bases 1-3
+                            else
+                            {
+                                AIPlayer plyrInst = obj.AddComponent<AIPlayer>();
+                                plyrInst.PlayerIndex = i;
+                                plyrInst.NickName = Globals.AI_PLAYER_NAMES[i - 1];
+                                this.Players.Add(plyrInst);
+                            }
+                        }
+                        this.TurnCount = 0;
+                        this.PuzzleState = ePuzzleState.E_PS_DISTRIBUTE_CARDS;
+                    }
+                    if(online && master)
+                    {
+                        int[] netMsg = { -1, -1, -1, -1 };
+
+                        int count = 0;
+                        GameObject obj = new GameObject();
+                        foreach (Player p in PhotonNetwork.PlayerList)
+                        {
+                            if (p.IsLocal)
+                            {
+                                // Set local player as index 0
+                                InputPlayer plyrInst = obj.AddComponent<InputPlayer>();
+                                plyrInst.PlayerIndex = count;
+                                plyrInst.ActorIndex = p.ActorNumber;
+                                plyrInst.NickName = p.NickName;
+                                this.Players.Add(plyrInst);
+                                netMsg[count] = plyrInst.ActorIndex;
+                                count++;
+                                break;
+                            }
+                        }
+                        // Now instantiate other online players
+                        obj = new GameObject();
+                        foreach (Player p in PhotonNetwork.PlayerList)
+                        {
+                            if (!p.IsLocal)
+                            {
+                                // Set local player as index 0
+                                OnlinePlayer plyrInst = obj.AddComponent<OnlinePlayer>();
+                                plyrInst.PlayerIndex = count;
+                                plyrInst.ActorIndex = p.ActorNumber;
+                                plyrInst.NickName = p.NickName;
+                                this.Players.Add(plyrInst);
+                                netMsg[count] = plyrInst.ActorIndex;
+                                count++;
+                            }
+                        }
+                        // Now instantiate and fill remaining spots with AI Players
+                        int ai_index = 0;
+                        for (int i = count; i < this.NumPlayers; i++)
+                        {
+                            obj = new GameObject();
+                            AIPlayer plyrInst = obj.AddComponent<AIPlayer>();
+                            plyrInst.PlayerIndex = i;
+                            plyrInst.ActorIndex = Globals.AI_PLAYER_INDEX_MULTIPLIER * (ai_index+1);
+                            plyrInst.NickName = Globals.AI_PLAYER_NAMES[ai_index];
+                            this.Players.Add(plyrInst);
+                            netMsg[i] = plyrInst.ActorIndex;
+                            ai_index++;
+                        }
+
+                        // Send the sequence of players to everyone, so they get same set of cards after shuffle
+                        OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ORDER, MiniJSON.Json.Serialize(netMsg), RpcTarget.Others);
+                        this.TurnCount = 0;
+                        this.PuzzleState = ePuzzleState.E_PS_DISTRIBUTE_CARDS;
                     }
                 }
-                this.TurnCount = 0;
-                this.PuzzleState = ePuzzleState.E_PS_SHUFFLE_CARDS;
-            }
-            else if (OnlineManager.Instance.IsMaster())
-            {
-                int count = 0;
-                GameObject obj = new GameObject();
-                foreach (Player p in PhotonNetwork.PlayerList)
+                break;
+            case ePuzzleState.E_PS_DISTRIBUTE_CARDS:
                 {
-                    if(p.IsLocal)
+                    if ((online && master) || !online)
                     {
-                        // Set local player as index 0
-                        InputPlayer plyrInst = obj.AddComponent<InputPlayer>();
-                        plyrInst.PlayerIndex = count;
-                        plyrInst.ActorIndex = p.ActorNumber;
-                        this.Players.Add(plyrInst);
-                        netMsg[count] = p.ActorNumber;
-                        count++;
-                        break;
+                        // Give 'n' cards to each player
+                        for (int i = 0; i < this.NumPlayers; i++)
+                        {
+                            this.Players[i].SetCards(DeckManager.Instance.mDeck.GetRange(0, this.CardsToDistribute));
+                            DeckManager.Instance.mDeck.RemoveRange(0, this.CardsToDistribute);
+                        }
+
+                        this.DrawPile = new List<Card>();
+                        this.UsedPile = new List<Card>();
+
+                        // facing card
+                        this.UsedPile.AddRange(DeckManager.Instance.mDeck.GetRange(0, 1));
+                        DeckManager.Instance.mDeck.RemoveRange(0, 1);
+
+                        int cnt = DeckManager.Instance.mDeck.Count;
+                        this.DrawPile.AddRange(DeckManager.Instance.mDeck.GetRange(0, cnt));
+                        DeckManager.Instance.mDeck.RemoveRange(0, cnt);
+
+                        MyPuzzleUI.UpdatePlayerNames(this.Players[1].NickName, this.Players[2].NickName, this.Players[3].NickName);
+                        MyPuzzleUI.UpdateDistributionDisplays(this, true);
+
+                        this.PuzzleState = ePuzzleState.E_PS_PLAYER_TURN;
                     }
                 }
-                // Now instantiate other online players
-                obj = new GameObject();
-                foreach (Player p in PhotonNetwork.PlayerList)
+                break;
+            case ePuzzleState.E_PS_PLAYER_TURN:
                 {
-                    if (!p.IsLocal)
-                    {
-                        // Set local player as index 0
-                        OnlinePlayer plyrInst = obj.AddComponent<OnlinePlayer>();
-                        plyrInst.PlayerIndex = count;
-                        plyrInst.ActorIndex = p.ActorNumber;
-                        this.Players.Add(plyrInst);
-                        netMsg[count] = p.ActorNumber;
-                        count++;
-                    }
+                    int plyrIndex = this.TurnCount % this.NumPlayers;
+
+                    ProcessTurnForAll(plyrIndex);
                 }
-                // Now instantiate and fill remaining spots with AI Players
-                for (int i = count; i < this.NumPlayers; i++)
-                {
-                    obj = new GameObject();
-                    AIPlayer plyrInst = obj.AddComponent<AIPlayer>();
-                    plyrInst.PlayerIndex = i;
-                    plyrInst.ActorIndex = -1; // -1 implies not online
-                    this.Players.Add(plyrInst);
-                    netMsg[i] = -1;
-                }
-
-                // Send the sequence of players to everyone, so they get same set of cards after shuffle
-                OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ORDER, netMsg.ToString(), RpcTarget.Others);
-                this.TurnCount = 0;
-                this.PuzzleState = ePuzzleState.E_PS_SHUFFLE_CARDS;
-            }
-
-            break;
-        case ePuzzleState.E_PS_SHUFFLE_CARDS:
-            // If not an online game, let's shuffle the cards
-            if(!OnlineManager.Instance.IsOnlineGame())
-            {
-                // shuffle the deck first!
-                DeckManager.Instance.mDeck.Shuffle();
-                // set to next state
-                this.PuzzleState = ePuzzleState.E_PS_DISTRIBUTE_CARDS;
-            }
-            // else, if we are host, shuffle AND let everyone know the new deck
-            else if(OnlineManager.Instance.IsMaster())
-            {
-                // shuffle the deck first!
-                DeckManager.Instance.mDeck.Shuffle();
-                // set to next state
-                this.PuzzleState = ePuzzleState.E_PS_DISTRIBUTE_CARDS;
-
-                OnlineManager.Instance.NetworkMessage(eMessage.E_M_SHUFFLED_DECK, DeckManager.Instance.DeckAsString(), RpcTarget.Others);
-            }
-            // else, we need to wait to hear about it from the OnlineManager
-            break;
-        case ePuzzleState.E_PS_DISTRIBUTE_CARDS:
-            // Give 'n' cards to each player
-            for (int i = 0; i < this.NumPlayers; i++)
-            {
-                this.Players[i].SetCards(DeckManager.Instance.mDeck.GetRange(0, this.CardsToDistribute));
-                DeckManager.Instance.mDeck.RemoveRange(0, this.CardsToDistribute);
-            }
-
-            this.DrawPile = new List<Card>();
-            this.UsedPile = new List<Card>();
-
-            // facing card
-            this.UsedPile.AddRange(DeckManager.Instance.mDeck.GetRange(0, 1));
-            DeckManager.Instance.mDeck.RemoveRange(0, 1);
-
-            int cnt = DeckManager.Instance.mDeck.Count;
-            this.DrawPile.AddRange(DeckManager.Instance.mDeck.GetRange(0, cnt));
-            DeckManager.Instance.mDeck.RemoveRange(0, cnt);
-
-            MyPuzzleUI.UpdateDistributionDisplays(this, true);
-
-            this.PuzzleState = ePuzzleState.E_PS_PLAYER_TURN;
-            break;
-        case ePuzzleState.E_PS_PLAYER_TURN:
-            int plyrIndex = this.TurnCount % this.NumPlayers;
-
-            ProcessTurnForAll(plyrIndex);
-            break;
-		default:
-			break;
+                break;
+    		default:
+	    		break;
 		}
 	}
 
-    void ProcessTurnForAll(int playerIndex)
+    public void InitPlayersFromOnline(string param)
+    {
+        int[] indices = { -1, -1, -1, -1 };
+        int j = 0;
+        List<object> indicesobjs = (List<object>)MiniJSON.Json.Deserialize(param);
+        foreach(object idx in indicesobjs)
+        {
+            indices[j] = (int)idx;
+            j++;
+        }
+
+        int count = 0;
+        GameObject obj = new GameObject();
+        foreach (Player p in PhotonNetwork.PlayerList)
+        {
+            if (p.IsLocal)
+            {
+                // Set local player as index 0
+                InputPlayer plyrInst = obj.AddComponent<InputPlayer>();
+                plyrInst.PlayerIndex = count;
+                plyrInst.ActorIndex = p.ActorNumber;
+                plyrInst.NickName = p.NickName;
+                this.Players.Add(plyrInst);
+                count++;
+                break;
+            }
+        }
+        // Now instantiate other online players
+        obj = new GameObject();
+        foreach (Player p in PhotonNetwork.PlayerList)
+        {
+            if (!p.IsLocal)
+            {
+                // Set local player as index 0
+                OnlinePlayer plyrInst = obj.AddComponent<OnlinePlayer>();
+                plyrInst.PlayerIndex = count;
+                plyrInst.ActorIndex = p.ActorNumber;
+                plyrInst.NickName = p.NickName;
+                this.Players.Add(plyrInst);
+                count++;
+            }
+        }
+        // Now instantiate and fill remaining spots with AI Players
+        for (int i = count; i < this.NumPlayers; i++)
+        {
+            int ai_index = indices[count] / Globals.AI_PLAYER_INDEX_MULTIPLIER;
+            ai_index--;
+            obj = new GameObject();
+            AIPlayer plyrInst = obj.AddComponent<AIPlayer>();
+            plyrInst.PlayerIndex = i;
+            plyrInst.ActorIndex = indices[count];
+            plyrInst.NickName = Globals.AI_PLAYER_NAMES[ai_index];
+            this.Players.Add(plyrInst);
+        }
+
+        // Give 'n' cards to each player
+        for (int i = 0; i < 4; i++)
+        {
+            // Find the player with this actor index, indices[i]
+            foreach(GamePlayer player in this.Players)
+            {
+                if(player.ActorIndex == indices[i])
+                {
+                    player.SetCards(DeckManager.Instance.mDeck.GetRange(0, this.CardsToDistribute));
+                    DeckManager.Instance.mDeck.RemoveRange(0, this.CardsToDistribute);
+                    break;
+                }
+            }
+        }
+
+        this.TurnCount = 0;
+        this.DrawPile = new List<Card>();
+        this.UsedPile = new List<Card>();
+
+        // facing card
+        this.UsedPile.AddRange(DeckManager.Instance.mDeck.GetRange(0, 1));
+        DeckManager.Instance.mDeck.RemoveRange(0, 1);
+
+        int cnt = DeckManager.Instance.mDeck.Count;
+        this.DrawPile.AddRange(DeckManager.Instance.mDeck.GetRange(0, cnt));
+        DeckManager.Instance.mDeck.RemoveRange(0, cnt);
+
+        MyPuzzleUI.UpdatePlayerNames(this.Players[1].NickName, this.Players[2].NickName, this.Players[3].NickName);
+        MyPuzzleUI.UpdateDistributionDisplays(this, true);
+
+        this.PuzzleState = ePuzzleState.E_PS_PLAYER_TURN;
+    }
+
+    public void LoadDeckFromOnine(string param)
+    {
+        // Load the shuffled deck
+        DeckManager.Instance.DeckFromString(param);
+        // Set puzzle state to distribute cards and move ahead!
+        GameMode.Instance.puzzle.PuzzleState = ePuzzleState.E_PS_SELECT_PLAYERS;
+    }
+
+    public void ProcessTurnForAll(int playerIndex)
     {
         for(int i=0; i<Players.Count; i++)
             Players[i].ProcessTurn(playerIndex);

@@ -7,6 +7,7 @@ public class GamePlayer : MonoBehaviour
 {
     public int PlayerIndex;
     public int ActorIndex;
+    public string NickName;
 
     protected bool MyTurn = false;
 

@@ -65,6 +65,9 @@ public static class Globals
     public static readonly int[] PLAYERCARDS_START_Y = { 0, 0, 0, 0 };
     public static readonly string[] PLAYER_PREFIXES = { PLAYER0_PREFIX, PLAYER1_PREFIX, PLAYER2_PREFIX, PLAYER3_PREFIX };
 
+    public static readonly string[] AI_PLAYER_NAMES = { "Alicia", "Brittney", "Christina", "Debbie" };
+
     public const string PLAYER_READY = "IsPlayerReady";
     public const string HOST_START = "IsHostStarted";
+    public const int AI_PLAYER_INDEX_MULTIPLIER = 100;
 }

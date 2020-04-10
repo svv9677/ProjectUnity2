@@ -13,7 +13,7 @@ public class GamePlayer : MonoBehaviour
 
     public List<Card> Cards;
 
-    public void Start()
+    public GamePlayer()
     {
         Cards = new List<Card>();
     }

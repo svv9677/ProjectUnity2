@@ -264,7 +264,7 @@ public class Puzzle : Mode {
         List<object> indicesobjs = (List<object>)MiniJSON.Json.Deserialize(param);
         foreach(object idx in indicesobjs)
         {
-            indices[j] = (int)idx;
+            indices[j] = System.Convert.ToInt32(idx);
             j++;
         }
 

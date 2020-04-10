@@ -50,6 +50,10 @@ public class Splash : Mode {
 
 	public override void EnterMode()
 	{
+		if (OnlineManager.Instance.IsConnected())
+			OnlineManager.Instance.Disconnect();
+
+		GameMode.Instance.hudUI.gameObject.SetActive(false);
 		DebugMenu.Instance.gameObject.SetActive(false);
 		Toast.Instance.gameObject.SetActive(false);
 
@@ -68,6 +72,7 @@ public class Splash : Mode {
 	{
 		this.startSinglePlayer.onClick.RemoveListener(OnStartSingleplayer);
 		this.startOnlinePlayer.onClick.RemoveListener(OnStartMultiplayer);
+		GameMode.Instance.hudUI.gameObject.SetActive(true);
 	}
 
 	public void OnStartSingleplayer()

@@ -17,6 +17,7 @@ public class GameMode : Singleton<GameMode> {
 	public Mode modeObject = null;
 	public eMode mode { get; private set; }
 
+	public HUDUI hudUI;
 	public Puzzle puzzle;
 	public Splash splash;
 	public Results results;
@@ -32,6 +33,7 @@ public class GameMode : Singleton<GameMode> {
 		this.splash?.gameObject.SetActive(false);
 		this.results?.gameObject.SetActive(false);
 		this.online?.gameObject.SetActive(false);
+		this.hudUI?.gameObject.SetActive(false);
 
 		this.mode = eMode.E_M_NONE;
 		SetMode (eMode.E_M_SPLASH);

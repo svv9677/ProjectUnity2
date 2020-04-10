@@ -1,17 +1,21 @@
 ﻿<Properties StartupConfiguration="{9562C9BD-53EE-3FF6-C8FF-9289A9E5C2BF}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameModes/Puzzle.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/UI/HUDUI.cs">
     <Files>
-      <File FileName="Assets/Scripts/Globals.cs" Line="69" Column="35" />
-      <File FileName="Assets/Scripts/GameModes/Puzzle.cs" Line="201" Column="1" />
+      <File FileName="Assets/Scripts/Globals.cs" Line="68" Column="52" />
       <File FileName="Assets/Scripts/Players/InputPlayer.cs" />
       <File FileName="Assets/Scripts/UI/OnlineUI.cs" />
-      <File FileName="Assets/Scripts/Players/GamePlayer.cs" />
-      <File FileName="Assets/Scripts/Singletons/DeckManager.cs" Line="414" Column="1" NotebookId="1" />
-      <File FileName="Assets/Scripts/UI/PuzzleUI.cs" NotebookId="1" />
+      <File FileName="Assets/Scripts/GameModes/Puzzle.cs" Line="68" Column="9" />
+      <File FileName="Assets/Scripts/Players/AIPlayer.cs" Line="158" Column="43" />
+      <File FileName="Assets/Scripts/Players/GamePlayer.cs" Line="32" Column="1" />
+      <File FileName="Assets/Scripts/Singletons/GameMode.cs" Line="36" Column="43" />
+      <File FileName="Assets/Scripts/GameModes/Splash.cs" Line="72" Column="52" />
+      <File FileName="Assets/Scripts/UI/HUDUI.cs" Line="19" Column="19" />
+      <File FileName="Assets/Scripts/Singletons/DeckManager.cs" Line="375" Column="14" NotebookId="1" />
+      <File FileName="Assets/Scripts/UI/PuzzleUI.cs" Line="20" Column="34" NotebookId="1" />
       <File FileName="Assets/Photon/PhotonUnityNetworking/Demos/DemoAsteroids/Scripts/Lobby/LobbyMainPanel.cs" NotebookId="1" />
       <File FileName="Assets/Photon/PhotonUnityNetworking/Demos/DemoAsteroids/Scripts/Lobby/LobbyTopPanel.cs" NotebookId="1" />
-      <File FileName="Assets/Scripts/Singletons/OnlineManager.cs" NotebookId="1" />
-      <File FileName="Assets/Scripts/Players/OnlinePlayer.cs" NotebookId="1" />
+      <File FileName="Assets/Scripts/Singletons/OnlineManager.cs" Line="39" Column="1" NotebookId="1" />
+      <File FileName="Assets/Scripts/Players/OnlinePlayer.cs" Line="9" Column="17" NotebookId="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -35,16 +39,23 @@
               </Node>
               <Node name="Scripts" expanded="True">
                 <Node name="Core" expanded="True" />
-                <Node name="GameModes" expanded="True">
-                  <Node name="Puzzle.cs" selected="True" />
-                </Node>
+                <Node name="GameModes" expanded="True" />
                 <Node name="Players" expanded="True" />
                 <Node name="Singletons" expanded="True" />
-                <Node name="UI" expanded="True" />
+                <Node name="UI" expanded="True">
+                  <Node name="HUDUI.cs" selected="True" />
+                </Node>
                 <Node name="Utils" expanded="True" />
               </Node>
             </Node>
           </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State>
+          <Value>param</Value>
+          <Value>(List&lt;int&gt;)global::MiniJSON.Json.Deserialize(param)</Value>
+          <Value>(int)idx</Value>
         </State>
       </Pad>
     </Pads>

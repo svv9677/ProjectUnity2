@@ -65,7 +65,7 @@ public class Puzzle : Mode {
                 val = 10;
             total += val;
         }
-        string text = "Player " + playerIndex.ToString() + " - LEAST COUNT!! Count: " + total.ToString();
+        string text = Players[playerIndex].NickName + " - LEAST COUNT!! Count: " + total.ToString();
         Globals.ShowToast(text, 15, 5.0f);
         Debug.Log(text);
     }
@@ -87,6 +87,13 @@ public class Puzzle : Mode {
             foreach (Card card in DrawPile)
                 card.Destroy();
         }
+
+        // For now default to globals' min player count
+        this.NumPlayers = Globals.gMinimumPlayers;
+        // 7 cards per player as per rules
+        this.CardsToDistribute = Globals.gCardsToDistribute;
+
+        this.Players = new List<GamePlayer>();
 
         this.PuzzleState = ePuzzleState.E_PS_SHUFFLE_CARDS;
         this.MyPuzzleUI = this.gameObject.GetComponent<PuzzleUI>();
@@ -126,13 +133,6 @@ public class Puzzle : Mode {
                 break;
             case ePuzzleState.E_PS_SELECT_PLAYERS:
                 {
-                    // For now default to globals' min player count
-                    this.NumPlayers = Globals.gMinimumPlayers;
-                    // 7 cards per player as per rules
-                    this.CardsToDistribute = Globals.gCardsToDistribute;
-
-                    this.Players = new List<GamePlayer>();
-
                     if(!online)
                     {
                         for (int i = 0; i < this.NumPlayers; i++)
@@ -306,11 +306,11 @@ public class Puzzle : Mode {
         for (int i = count; i < this.NumPlayers; i++)
         {
             obj = new GameObject();
-            int ai_index = indices[count] / Globals.AI_PLAYER_INDEX_MULTIPLIER;
+            int ai_index = indices[i] / Globals.AI_PLAYER_INDEX_MULTIPLIER;
             ai_index--;
             AIPlayer plyrInst = obj.AddComponent<AIPlayer>();
             plyrInst.PlayerIndex = i;
-            plyrInst.ActorIndex = indices[count];
+            plyrInst.ActorIndex = indices[i];
             plyrInst.NickName = Globals.AI_PLAYER_NAMES[ai_index];
             this.Players.Add(plyrInst);
             count++;
@@ -324,6 +324,7 @@ public class Puzzle : Mode {
             {
                 if(player.ActorIndex == indices[i])
                 {
+                    Debug.Log(string.Format("Setting cards for player: {0} - {1}", player.ActorIndex, player.NickName));
                     player.SetCards(DeckManager.Instance.mDeck.GetRange(0, this.CardsToDistribute));
                     DeckManager.Instance.mDeck.RemoveRange(0, this.CardsToDistribute);
                     break;

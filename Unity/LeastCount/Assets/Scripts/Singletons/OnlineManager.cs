@@ -60,6 +60,11 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
         PlayerPropertiesCB = callback;
     }
 
+    public bool IsConnected()
+    {
+        return PhotonNetwork.IsConnected;
+    }
+
     public bool IsOnlineGame()
     {
         return PhotonNetwork.CurrentRoom != null;
@@ -79,6 +84,11 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
             return eConnectionState.E_CS_CONNECTED;
         else
             return eConnectionState.E_CS_NETWORK_ERROR;
+    }
+
+    public void Disconnect()
+    {
+        PhotonNetwork.Disconnect();
     }
 
     public bool CreateRoom(string roomName, Action<bool, short, string> callback)

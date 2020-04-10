@@ -92,6 +92,7 @@
     <Compile Include="Assets\Scripts\Singletons\Toast.cs" />
     <Compile Include="Assets\Scripts\Singletons\User.cs" />
     <Compile Include="Assets\Scripts\UI\CardUI.cs" />
+    <Compile Include="Assets\Scripts\UI\HUDUI.cs" />
     <Compile Include="Assets\Scripts\UI\OnlineItem.cs" />
     <Compile Include="Assets\Scripts\UI\OnlineUI.cs" />
     <Compile Include="Assets\Scripts\UI\PuzzleUI.cs" />

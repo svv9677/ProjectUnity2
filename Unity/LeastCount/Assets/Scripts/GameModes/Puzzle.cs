@@ -360,8 +360,14 @@ public class Puzzle : Mode {
 
     public void HandleOnlineAction(string param, Player player)
     {
-        List<object> paramObjs = (List<object>)MiniJSON.Json.Deserialize(param);
+        Dictionary<string, object> paramObj = (Dictionary<string, object>)MiniJSON.Json.Deserialize(param);
+        foreach(KeyValuePair<string, object> entry in paramObj)
+        {
+            string val = (string)entry.Value;
 
+        }
+
+        Debug.Log(paramObj.ToString());
     }
 
     public void ProcessTurnForAll(int playerIndex)

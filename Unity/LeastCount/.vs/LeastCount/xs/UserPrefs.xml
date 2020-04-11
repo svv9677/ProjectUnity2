@@ -4,7 +4,7 @@
       <File FileName="Assets/Scripts/Globals.cs" Line="68" Column="52" />
       <File FileName="Assets/Scripts/Players/InputPlayer.cs" />
       <File FileName="Assets/Scripts/UI/OnlineUI.cs" />
-      <File FileName="Assets/Scripts/GameModes/Puzzle.cs" Line="364" Column="1" />
+      <File FileName="Assets/Scripts/GameModes/Puzzle.cs" Line="363" Column="1" />
       <File FileName="Assets/Scripts/Players/AIPlayer.cs" />
       <File FileName="Assets/Scripts/Players/GamePlayer.cs" />
       <File FileName="Assets/Scripts/Singletons/GameMode.cs" />
@@ -36,7 +36,8 @@
     <String>PunDemos.DemoSlotcarEditor.csproj</String>
     <String>PhotonUnityNetworking.Utilities.csproj</String>
   </DisabledProjects>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Unity.2D.Sprite.Editor PreferredExecutionTarget="0d875bb5-e061-4ce5-b844-e2c2baf04e8f" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/rao/Git/ProjectUnity2/Unity/LeastCount/Assets/Scripts/GameModes/Puzzle.cs" relfile="Assets/Scripts/GameModes/Puzzle.cs" line="363" column="1" />

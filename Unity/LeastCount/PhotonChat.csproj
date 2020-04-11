@@ -75,12 +75,6 @@
     <Compile Include="Assets\Photon\PhotonChat\Code\ChatState.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Code\ChatUserStatus.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Code\IChatClientListener.cs" />
-    <Reference Include="UnityEditor.UI">
-      <HintPath>/Users/rao/Git/ProjectUnity2/Unity/LeastCount/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>/Users/rao/Git/ProjectUnity2/Unity/LeastCount/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>/Applications/Unity/Hub/Editor/2019.3.6f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
     </Reference>
@@ -632,6 +626,14 @@
     <ProjectReference Include="PhotonWebSocket.csproj">
       <Project>{EBBA9573-EE95-B6D9-EF51-E01FFCB1BF76}</Project>
       <Name>PhotonWebSocket</Name>
+    </ProjectReference>
+    <ProjectReference Include="UnityEditor.UI.csproj">
+      <Project>{6386CBA6-95D1-0C83-5F69-4AD7EE73A7BD}</Project>
+      <Name>UnityEditor.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="UnityEngine.UI.csproj">
+      <Project>{6806E459-A688-7238-52CC-AB046A53075A}</Project>
+      <Name>UnityEngine.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

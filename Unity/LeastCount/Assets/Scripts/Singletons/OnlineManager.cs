@@ -256,7 +256,7 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
     ////////////////////////////////////////////////////////////////////////////////////////////
     #region ONLINE NETWORKING
 
-    public void NetworkMessage(eMessage message, string param, RpcTarget target = RpcTarget.All)
+    public void NetworkMessage(eMessage message, string param, RpcTarget target = RpcTarget.Others)
     {
         if (!IsOnlineGame())
             return;
@@ -281,6 +281,12 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
                     GameMode.Instance.puzzle.InitPlayersFromOnline(param);
                 }
                 break;
+            case eMessage.E_M_PLAYER_ACTION:
+                {
+                    // Handle remote player's action
+                    GameMode.Instance.puzzle.HandleOnlineAction(param, info.Sender);
+                }
+                break;
             default:
                 Debug.Log(String.Format("NETWORKMESSAGE: {0} sent {1} : {2}", info.Sender.NickName, message, param));
                 break;
@@ -295,5 +301,7 @@ public enum eMessage
 {
     E_M_SHUFFLED_DECK,
     E_M_PLAYER_ORDER,
+    E_M_PLAYER_ACTION,
+    E_M_PLAYER_END_TURN,
 }
 

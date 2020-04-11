@@ -126,7 +126,7 @@ public class Puzzle : Mode {
                         // set to next state
                         this.PuzzleState = ePuzzleState.E_PS_SELECT_PLAYERS;
 
-                        OnlineManager.Instance.NetworkMessage(eMessage.E_M_SHUFFLED_DECK, DeckManager.Instance.DeckAsString(), RpcTarget.Others);
+                        OnlineManager.Instance.NetworkMessage(eMessage.E_M_SHUFFLED_DECK, DeckManager.Instance.DeckAsString());
                     }
                     // else, we need to wait to hear about it from the OnlineManager
                 }
@@ -212,7 +212,7 @@ public class Puzzle : Mode {
                         }
 
                         // Send the sequence of players to everyone, so they get same set of cards after shuffle
-                        OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ORDER, MiniJSON.Json.Serialize(netMsg), RpcTarget.Others);
+                        OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ORDER, MiniJSON.Json.Serialize(netMsg));
                         this.TurnCount = 0;
                         this.PuzzleState = ePuzzleState.E_PS_DISTRIBUTE_CARDS;
                     }
@@ -356,6 +356,12 @@ public class Puzzle : Mode {
         DeckManager.Instance.DeckFromString(param);
         // Set puzzle state to distribute cards and move ahead!
         GameMode.Instance.puzzle.PuzzleState = ePuzzleState.E_PS_SELECT_PLAYERS;
+    }
+
+    public void HandleOnlineAction(string param, Player player)
+    {
+        List<object> paramObjs = (List<object>)MiniJSON.Json.Deserialize(param);
+
     }
 
     public void ProcessTurnForAll(int playerIndex)

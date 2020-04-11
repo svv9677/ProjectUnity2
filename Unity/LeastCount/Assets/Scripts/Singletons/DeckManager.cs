@@ -49,6 +49,11 @@ public class Card
 
     public bool         mMoveDirty;
 
+    public string OnlineHash()
+    {
+        return mSet.ToString() + ":" + mCardObj?.name;
+    }
+
     public Card(int _set, int _color, int _type, int _number)
     {
         this.mSet = _set;

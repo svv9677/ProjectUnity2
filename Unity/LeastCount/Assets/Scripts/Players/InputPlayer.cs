@@ -31,14 +31,14 @@ public class InputPlayer : GamePlayer
     {
         // Hook into the OnFingerTap event
         Lean.LeanTouch.OnFingerTap += OnFingerTap;
-        Lean.LeanTouch.OnMultiTap += OnMultiTap;
+        //Lean.LeanTouch.OnMultiTap += OnMultiTap;
     }
 
     public override void OnDisabled()
     {
         // Unhook into the OnFingerTap event
         Lean.LeanTouch.OnFingerTap -= OnFingerTap;
-        Lean.LeanTouch.OnMultiTap -= OnMultiTap;
+        //Lean.LeanTouch.OnMultiTap -= OnMultiTap;
         Debug.Log("Input Player onDisabled calleD!!");
     }
 
@@ -87,15 +87,15 @@ public class InputPlayer : GamePlayer
         this.TurnState = state;
     }
 
-    public void OnMultiTap(int tapCount)
-    {
-#if UNITY_EDITOR
-        if (tapCount == 4)
-            ToggleDebugMenu();
-        else if(tapCount >= 5)
-            GameMode.Instance.SetMode(eMode.E_M_SPLASH);
-#endif
-    }
+//    public void OnMultiTap(int tapCount)
+//    {
+//#if UNITY_EDITOR
+//        if (tapCount == 4)
+//            ToggleDebugMenu();
+//        else if(tapCount >= 5)
+//            GameMode.Instance.SetMode(eMode.E_M_SPLASH);
+//#endif
+//    }
 
     public void OnFingerTap(Lean.LeanFinger finger)
     {
@@ -152,6 +152,15 @@ public class InputPlayer : GamePlayer
                                         lastUsedPileCard.SetPrefix(Globals.PLAYER_PREFIXES[PlayerIndex]);
                                         lastUsedPileCard.mMoveDirty = true;
                                         Cards.Add(lastUsedPileCard);
+
+                                        // Handle Online gameplay
+                                        Dictionary<string, string> param = new Dictionary<string, string>();
+                                        string hash = lastUsedPileCard.OnlineHash();
+                                        param["action"] = "used-rem";
+                                        param["card"] = hash;
+                                        param["action"] = "add";
+                                        param["card"] = hash;
+                                        OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ACTION, MiniJSON.Json.Serialize(param));
                                     }
                                 }
                             }

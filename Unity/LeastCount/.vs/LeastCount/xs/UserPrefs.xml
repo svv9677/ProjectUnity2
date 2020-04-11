@@ -18,6 +18,15 @@
       <File FileName="Assets/Scripts/Players/OnlinePlayer.cs" NotebookId="1" />
       <File FileName="Assets/Scripts/GameModes/Online.cs" NotebookId="1" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="LeastCount" expanded="True">
+            <Node name="Assembly-CSharp" selected="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <DisabledProjects>
@@ -27,12 +36,10 @@
     <String>PhotonUnityNetworking.csproj</String>
     <String>PhotonRealtime.csproj</String>
     <String>PhotonChat.csproj</String>
-    <String>Assembly-CSharp-Editor.csproj</String>
     <String>PunDemos.DemoHubEditor.csproj</String>
     <String>PhotonUnityNetworking.Editor.csproj</String>
     <String>PhotonUnityNetworking.Utilities.PhotonPlayer.Editor.csproj</String>
     <String>PhotonUnityNetworking.Utilities.Culling.Editor.csproj</String>
-    <String>Assembly-CSharp.csproj</String>
     <String>PunDemos.DemoSlotcarEditor.csproj</String>
     <String>PhotonUnityNetworking.Utilities.csproj</String>
   </DisabledProjects>

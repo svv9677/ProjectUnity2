@@ -1,0 +1,46 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameModes/Puzzle.cs">
+    <Files>
+      <File FileName="Assets/Scripts/Globals.cs" Line="68" Column="52" />
+      <File FileName="Assets/Scripts/Players/InputPlayer.cs" />
+      <File FileName="Assets/Scripts/UI/OnlineUI.cs" />
+      <File FileName="Assets/Scripts/GameModes/Puzzle.cs" Line="364" Column="1" />
+      <File FileName="Assets/Scripts/Players/AIPlayer.cs" />
+      <File FileName="Assets/Scripts/Players/GamePlayer.cs" />
+      <File FileName="Assets/Scripts/Singletons/GameMode.cs" />
+      <File FileName="Assets/Scripts/GameModes/Splash.cs" />
+      <File FileName="Assets/Scripts/UI/HUDUI.cs" />
+      <File FileName="Assets/Scripts/Singletons/DeckManager.cs" Line="46" Column="1" NotebookId="1" />
+      <File FileName="Assets/Scripts/UI/PuzzleUI.cs" NotebookId="1" />
+      <File FileName="Assets/Photon/PhotonUnityNetworking/Demos/DemoAsteroids/Scripts/Lobby/LobbyMainPanel.cs" NotebookId="1" />
+      <File FileName="Assets/Photon/PhotonUnityNetworking/Demos/DemoAsteroids/Scripts/Lobby/LobbyTopPanel.cs" NotebookId="1" />
+      <File FileName="Assets/Scripts/Singletons/OnlineManager.cs" NotebookId="1" />
+      <File FileName="Assets/Scripts/Players/OnlinePlayer.cs" NotebookId="1" />
+      <File FileName="Assets/Scripts/GameModes/Online.cs" NotebookId="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <DisabledProjects>
+    <String>Assembly-CSharp-firstpass.csproj</String>
+    <String>PhotonUnityNetworking.Demos.csproj</String>
+    <String>PhotonWebSocket.csproj</String>
+    <String>PhotonUnityNetworking.csproj</String>
+    <String>PhotonRealtime.csproj</String>
+    <String>PhotonChat.csproj</String>
+    <String>Assembly-CSharp-Editor.csproj</String>
+    <String>PunDemos.DemoHubEditor.csproj</String>
+    <String>PhotonUnityNetworking.Editor.csproj</String>
+    <String>PhotonUnityNetworking.Utilities.PhotonPlayer.Editor.csproj</String>
+    <String>PhotonUnityNetworking.Utilities.Culling.Editor.csproj</String>
+    <String>Assembly-CSharp.csproj</String>
+    <String>PunDemos.DemoSlotcarEditor.csproj</String>
+    <String>PhotonUnityNetworking.Utilities.csproj</String>
+  </DisabledProjects>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/rao/Git/ProjectUnity2/Unity/LeastCount/Assets/Scripts/GameModes/Puzzle.cs" relfile="Assets/Scripts/GameModes/Puzzle.cs" line="363" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>

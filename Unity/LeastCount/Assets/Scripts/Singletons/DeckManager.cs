@@ -51,12 +51,12 @@ public class Card
 
     public string OnlineHash()
     {
-        return mSet.ToString() + ":" + mCardObj?.name;
+        return mSet.ToString() + "+" + mCardObj?.name;
     }
 
     public string ToStringForDict()
     {
-        return mSet.ToString() + ":" + mName;
+        return mSet.ToString() + "+" + mName;
     }
 
     public Card(int _set, int _color, int _type, int _number)
@@ -421,6 +421,8 @@ public class DeckManager : Singleton<DeckManager>
             retVal += mDeck[i].ToStringForDict();
             if (i < mDeck.Count - 1)
                 retVal += ",";
+            else
+                retVal += "]";
         }
         return retVal;
     }
@@ -432,7 +434,7 @@ public class DeckManager : Singleton<DeckManager>
         foreach(object obj in deckobjs)
         {
             string str = (string)obj;
-            string[] toks = str.Split(':');
+            string[] toks = str.Split('+');
             int set = System.Convert.ToInt32(toks[0]);
             Card card = new Card(toks[1], set);
             mDeck.Add(card);

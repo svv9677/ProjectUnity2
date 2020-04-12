@@ -54,6 +54,11 @@ public class Card
         return mSet.ToString() + ":" + mCardObj?.name;
     }
 
+    public string ToStringForDict()
+    {
+        return mSet.ToString() + ":" + mName;
+    }
+
     public Card(int _set, int _color, int _type, int _number)
     {
         this.mSet = _set;
@@ -410,21 +415,26 @@ public class DeckManager : Singleton<DeckManager>
 
     public string DeckAsString()
     {
-        return MiniJSON.Json.Serialize(mDeck);
+        string retVal = "[";
+        for(int i=0; i<mDeck.Count; i++)
+        {
+            retVal += mDeck[i].ToStringForDict();
+            if (i < mDeck.Count - 1)
+                retVal += ",";
+        }
+        return retVal;
     }
 
     public void DeckFromString(string deckstr)
     {
         mDeck.Clear();
         List<object> deckobjs = (List<object>)MiniJSON.Json.Deserialize(deckstr);
-        List<string> deckSet = new List<string>();
         foreach(object obj in deckobjs)
         {
             string str = (string)obj;
-            int set = 0;
-            if (deckSet.Contains(str))
-                set = 1;
-            Card card = new Card(str, set);
+            string[] toks = str.Split(':');
+            int set = System.Convert.ToInt32(toks[0]);
+            Card card = new Card(toks[1], set);
             mDeck.Add(card);
         }
     }

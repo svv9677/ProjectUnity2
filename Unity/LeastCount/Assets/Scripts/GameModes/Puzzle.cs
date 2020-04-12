@@ -123,6 +123,7 @@ public class Puzzle : Mode {
                     {
                         // shuffle the deck first!
                         DeckManager.Instance.mDeck.Shuffle();
+                        Debug.Log(DeckManager.Instance.DeckAsString());
                         // set to next state
                         this.PuzzleState = ePuzzleState.E_PS_SELECT_PLAYERS;
 
@@ -354,6 +355,7 @@ public class Puzzle : Mode {
     {
         // Load the shuffled deck
         DeckManager.Instance.DeckFromString(param);
+        Debug.Log(DeckManager.Instance.DeckAsString());
         // Set puzzle state to distribute cards and move ahead!
         GameMode.Instance.puzzle.PuzzleState = ePuzzleState.E_PS_SELECT_PLAYERS;
     }

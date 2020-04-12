@@ -272,48 +272,70 @@ public class Puzzle : Mode {
         }
 
         int count = 0;
+        int indices_idx = 0;
         GameObject obj;
         foreach (Player p in PhotonNetwork.PlayerList)
         {
             if (p.IsLocal)
             {
                 obj = new GameObject();
-                // Set local player as index 0
+                // Set local player first
                 InputPlayer plyrInst = obj.AddComponent<InputPlayer>();
                 plyrInst.PlayerIndex = count;
                 plyrInst.ActorIndex = p.ActorNumber;
                 plyrInst.NickName = p.NickName;
                 this.Players.Add(plyrInst);
                 count++;
+                for(int k=0; k<4; k++)
+                {
+                    if(indices[k] == p.ActorNumber)
+                    {
+                        indices_idx = k;
+                        break;
+                    }
+                }
                 break;
             }
         }
-        // Now instantiate other online players
-        foreach (Player p in PhotonNetwork.PlayerList)
+
+        // Setup remaining 3 players
+        for(int p=0; p<3; p++)
         {
-            if (!p.IsLocal)
+            // get the next index from indices
+            indices_idx++;
+            indices_idx = indices_idx % 4;
+
+            // Now instantiate other online players
+            bool found = false;
+            foreach (Player pl in PhotonNetwork.PlayerList)
             {
-                obj = new GameObject();
-                // Set local player as index 0
-                OnlinePlayer plyrInst = obj.AddComponent<OnlinePlayer>();
-                plyrInst.PlayerIndex = count;
-                plyrInst.ActorIndex = p.ActorNumber;
-                plyrInst.NickName = p.NickName;
-                this.Players.Add(plyrInst);
-                count++;
+                if (!pl.IsLocal && pl.ActorNumber == indices[indices_idx])
+                {
+                    obj = new GameObject();
+                    // Set local player as index 0
+                    OnlinePlayer plyrInst1 = obj.AddComponent<OnlinePlayer>();
+                    plyrInst1.PlayerIndex = count;
+                    plyrInst1.ActorIndex = pl.ActorNumber;
+                    plyrInst1.NickName = pl.NickName;
+                    this.Players.Add(plyrInst1);
+                    count++;
+                    found = true;
+                    break;
+                }
             }
-        }
-        // Now instantiate and fill remaining spots with AI Players
-        for (int i = count; i < this.NumPlayers; i++)
-        {
+            if (found)
+                continue;
+
+            // If we have come here, our next player is an AI player
+            // Now instantiate an AI Player
             obj = new GameObject();
-            int ai_index = indices[i] / Globals.AI_PLAYER_INDEX_MULTIPLIER;
+            int ai_index = indices[indices_idx] / Globals.AI_PLAYER_INDEX_MULTIPLIER;
             ai_index--;
-            AIPlayer plyrInst = obj.AddComponent<AIPlayer>();
-            plyrInst.PlayerIndex = i;
-            plyrInst.ActorIndex = indices[i];
-            plyrInst.NickName = Globals.AI_PLAYER_NAMES[ai_index];
-            this.Players.Add(plyrInst);
+            AIPlayer plyrInst2 = obj.AddComponent<AIPlayer>();
+            plyrInst2.PlayerIndex = count;
+            plyrInst2.ActorIndex = indices[indices_idx];
+            plyrInst2.NickName = Globals.AI_PLAYER_NAMES[ai_index];
+            this.Players.Add(plyrInst2);
             count++;
         }
 

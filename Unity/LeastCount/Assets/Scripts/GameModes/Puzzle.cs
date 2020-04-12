@@ -382,9 +382,15 @@ public class Puzzle : Mode {
 					}
                     break;
                 // Add the card to used pile and remove from Cards
-                case "cards-rem&used-add":
-					{
-                        if(oplyr != null)
+                case "cards-rem&used-add-0":
+                case "cards-rem&used-add-1":
+                case "cards-rem&used-add-2":
+                case "cards-rem&used-add-3":
+                case "cards-rem&used-add-4":
+                case "cards-rem&used-add-5":
+                case "cards-rem&used-add-6":
+                    {
+                        if (oplyr != null)
 						{
                             // Find the card
                             for (int i=0; i<oplyr.Cards.Count; i++)
@@ -403,8 +409,14 @@ public class Puzzle : Mode {
                     }
                     break;
                 // Add the card to player's cards & Remove card from used pile
-                case "used-rem&cards-add":
-					{
+                case "used-rem&cards-add-0":
+                case "used-rem&cards-add-1":
+                case "used-rem&cards-add-2":
+                case "used-rem&cards-add-3":
+                case "used-rem&cards-add-4":
+                case "used-rem&cards-add-5":
+                case "used-rem&cards-add-6":
+                    {
                         // Trace the card in Used Pile
                         Card card = null;
                         for (int i = this.UsedPile.Count - 1; i >= 0; i--)

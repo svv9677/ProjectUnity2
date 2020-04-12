@@ -156,7 +156,7 @@ public class InputPlayer : GamePlayer
 
                                         // Handle Online gameplay
                                         string hash = lastUsedPileCard.OnlineHash();
-                                        param.Add("used-rem&cards-add", hash);
+                                        param.Add("used-rem&cards-add-"+i.ToString(), hash);
                                     }
                                     OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ACTION, MiniJSON.Json.Serialize(param));
                                 }
@@ -194,6 +194,7 @@ public class InputPlayer : GamePlayer
                             param1.Add("last-dropped-count", CardsSelected.Count.ToString());
 
                             // drop our selected cards onto used pile, also remove them from our card list
+                            int dd = 0;
                             foreach (Card card in CardsSelected)
                             {
                                 string hash1 = card.OnlineHash();
@@ -202,7 +203,8 @@ public class InputPlayer : GamePlayer
                                 card.mMoveDirty = true;
                                 GameMode.Instance.puzzle.UsedPile.Add(card);
 
-                                param1.Add("cards-rem&used-add", hash1);
+                                param1.Add("cards-rem&used-add-"+dd.ToString(), hash1);
+                                dd++;
                             }
 
                             TurnState = eTurnState.E_TS_EXCHANGE_CARDS;

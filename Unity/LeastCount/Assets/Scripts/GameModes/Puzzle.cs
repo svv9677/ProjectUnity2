@@ -15,7 +15,7 @@ public enum ePuzzleState {
 
 	E_PS_GAME_RESULTS
 }
-    
+
 
 public class Puzzle : Mode {
 
@@ -23,6 +23,7 @@ public class Puzzle : Mode {
     private int NumPlayers;
     private int TurnCount;
     private int CardsToDistribute;
+    private int[] ActorIndices = {-1, -1, -1, -1};
 
     public List<GamePlayer> Players;
     public List<Card> DrawPile;
@@ -161,8 +162,6 @@ public class Puzzle : Mode {
                     }
                     if(online && master)
                     {
-                        int[] netMsg = { -1, -1, -1, -1 };
-
                         int count = 0;
                         GameObject obj;
                         foreach (Player p in PhotonNetwork.PlayerList)
@@ -176,7 +175,7 @@ public class Puzzle : Mode {
                                 plyrInst.ActorIndex = p.ActorNumber;
                                 plyrInst.NickName = p.NickName;
                                 this.Players.Add(plyrInst);
-                                netMsg[count] = plyrInst.ActorIndex;
+                                this.ActorIndices[count] = plyrInst.ActorIndex;
                                 count++;
                                 break;
                             }
@@ -193,7 +192,7 @@ public class Puzzle : Mode {
                                 plyrInst.ActorIndex = p.ActorNumber;
                                 plyrInst.NickName = p.NickName;
                                 this.Players.Add(plyrInst);
-                                netMsg[count] = plyrInst.ActorIndex;
+                                this.ActorIndices[count] = plyrInst.ActorIndex;
                                 count++;
                             }
                         }
@@ -207,13 +206,13 @@ public class Puzzle : Mode {
                             plyrInst.ActorIndex = Globals.AI_PLAYER_INDEX_MULTIPLIER * (ai_index+1);
                             plyrInst.NickName = Globals.AI_PLAYER_NAMES[ai_index];
                             this.Players.Add(plyrInst);
-                            netMsg[i] = plyrInst.ActorIndex;
+                            this.ActorIndices[i] = plyrInst.ActorIndex;
                             ai_index++;
                             count++;
                         }
 
                         // Send the sequence of players to everyone, so they get same set of cards after shuffle
-                        OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ORDER, MiniJSON.Json.Serialize(netMsg));
+                        OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ORDER, MiniJSON.Json.Serialize(this.ActorIndices));
                         this.TurnCount = 0;
                         this.PuzzleState = ePuzzleState.E_PS_DISTRIBUTE_CARDS;
                     }
@@ -250,9 +249,9 @@ public class Puzzle : Mode {
                 break;
             case ePuzzleState.E_PS_PLAYER_TURN:
                 {
-                    int plyrIndex = this.TurnCount % this.NumPlayers;
+                    int actorIndex = this.ActorIndices[this.TurnCount % this.NumPlayers];
 
-                    ProcessTurnForAll(plyrIndex);
+                    ProcessTurnForAll(actorIndex);
                 }
                 break;
     		default:
@@ -270,6 +269,10 @@ public class Puzzle : Mode {
             indices[j] = System.Convert.ToInt32(idx);
             j++;
         }
+        this.ActorIndices[0] = indices[0];
+        this.ActorIndices[1] = indices[1];
+        this.ActorIndices[2] = indices[2];
+        this.ActorIndices[3] = indices[3];
 
         int count = 0;
         int indices_idx = 0;
@@ -326,12 +329,12 @@ public class Puzzle : Mode {
             if (found)
                 continue;
 
-            // If we have come here, our next player is an AI player
-            // Now instantiate an AI Player
+            // If we have come here, our next player is an AI player on master
+            // Now instantiate them as Online Player
             obj = new GameObject();
             int ai_index = indices[indices_idx] / Globals.AI_PLAYER_INDEX_MULTIPLIER;
             ai_index--;
-            AIPlayer plyrInst2 = obj.AddComponent<AIPlayer>();
+            OnlinePlayer plyrInst2 = obj.AddComponent<OnlinePlayer>();
             plyrInst2.PlayerIndex = count;
             plyrInst2.ActorIndex = indices[indices_idx];
             plyrInst2.NickName = Globals.AI_PLAYER_NAMES[ai_index];
@@ -500,14 +503,12 @@ public class Puzzle : Mode {
                     break;
             }
         }
-
-        Debug.Log(paramObj.ToString());
     }
 
-    public void ProcessTurnForAll(int playerIndex)
+    public void ProcessTurnForAll(int actorIndex)
     {
         for(int i=0; i<Players.Count; i++)
-            Players[i].ProcessTurn(playerIndex);
+            Players[i].ProcessTurn(actorIndex);
     }
 
     public void IncrementTurn() 

@@ -35,9 +35,9 @@ public class AIPlayer: GamePlayer
         }
     }
 
-    public override void ProcessTurn(int playerIndex)
+    public override void ProcessTurn(int actorIndex)
     {
-        if (this.PlayerIndex != playerIndex)
+        if (this.ActorIndex != actorIndex)
         {
             this.MyTurn = false;
             return;

@@ -305,9 +305,9 @@ public class InputPlayer : GamePlayer
     //        DebugMenu.Instance.gameObject.SetActive(true);
     //}
 
-    public override void ProcessTurn(int playerIndex)
+    public override void ProcessTurn(int actorIndex)
     {
-        if (this.PlayerIndex == playerIndex)
+        if (this.ActorIndex == actorIndex)
         {
             if (!this.MyTurn)
             {

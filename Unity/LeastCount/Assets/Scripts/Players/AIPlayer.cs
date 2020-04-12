@@ -80,7 +80,7 @@ public class AIPlayer: GamePlayer
         yield return StartCoroutine(DecideAndDropCards());
 
         this.OnlineParam.Add("incr-turn", "");
-        OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ACTION, MiniJSON.Json.Serialize(this.OnlineParam));
+        OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ACTION, MiniJSON.Json.Serialize(this.OnlineParam), this);
 
         yield return new WaitForSeconds(1);
 

@@ -158,7 +158,7 @@ public class InputPlayer : GamePlayer
                                         // Handle Online gameplay
                                         param.Add("used-rem&cards-add-"+i.ToString(), hash);
                                     }
-                                    OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ACTION, MiniJSON.Json.Serialize(param));
+                                    OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ACTION, MiniJSON.Json.Serialize(param), this);
                                 }
                             }
                             else
@@ -182,7 +182,7 @@ public class InputPlayer : GamePlayer
                                     // Handle Online gameplay
                                     param.Add("draw-rem&cards-add", hash);
 
-                                    OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ACTION, MiniJSON.Json.Serialize(param));
+                                    OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ACTION, MiniJSON.Json.Serialize(param), this);
                                 }
                             }
 
@@ -211,7 +211,7 @@ public class InputPlayer : GamePlayer
                             StartCoroutine(PerformDisplay());
 
                             param1.Add("incr-turn", "");
-                            OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ACTION, MiniJSON.Json.Serialize(param1));
+                            OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ACTION, MiniJSON.Json.Serialize(param1), this);
 
                             return;
                         }

@@ -418,7 +418,7 @@ public class DeckManager : Singleton<DeckManager>
         string retVal = "[";
         for(int i=0; i<mDeck.Count; i++)
         {
-            retVal += mDeck[i].ToStringForDict();
+            retVal += "\"" + mDeck[i].ToStringForDict() + "\"";
             if (i < mDeck.Count - 1)
                 retVal += ",";
             else

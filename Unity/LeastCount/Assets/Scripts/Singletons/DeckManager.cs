@@ -221,12 +221,20 @@ public class Card
 
     public static bool operator ==(Card lhs, Card rhs)
     {
+        if (lhs == null && rhs == null)
+            return true;
+        if (lhs == null || rhs == null)
+            return false;
         // for this game, if the number matches, that's good enough
-        return(rhs.mNumber == lhs.mNumber);
+        return (rhs.mNumber == lhs.mNumber);
     }
 
     public static bool operator !=(Card lhs, Card rhs)
     {
+        if (lhs == null && rhs == null)
+            return false;
+        if (lhs == null || rhs == null)
+            return true;
         // for this game, if the number matches, that's good enough
         return (rhs.mNumber != lhs.mNumber);
     }

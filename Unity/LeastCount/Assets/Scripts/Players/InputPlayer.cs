@@ -146,8 +146,9 @@ public class InputPlayer : GamePlayer
                                     {
                                         count = GameMode.Instance.puzzle.UsedPile.Count;
                                         lastUsedPileCard = GameMode.Instance.puzzle.UsedPile[count - 1];
+                                        string hash = lastUsedPileCard.OnlineHash();
 
-                                         // Remove from used pile
+                                        // Remove from used pile
                                         GameMode.Instance.puzzle.UsedPile.Remove(lastUsedPileCard);
                                         // add the card to our list of cards
                                         lastUsedPileCard.SetPrefix(Globals.PLAYER_PREFIXES[PlayerIndex]);
@@ -155,7 +156,6 @@ public class InputPlayer : GamePlayer
                                         Cards.Add(lastUsedPileCard);
 
                                         // Handle Online gameplay
-                                        string hash = lastUsedPileCard.OnlineHash();
                                         param.Add("used-rem&cards-add-"+i.ToString(), hash);
                                     }
                                     OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ACTION, MiniJSON.Json.Serialize(param));
@@ -170,6 +170,7 @@ public class InputPlayer : GamePlayer
                                     Dictionary<string, string> param = new Dictionary<string, string>();
                                     count = GameMode.Instance.puzzle.DrawPile.Count;
                                     Card lastDrawPileCard = GameMode.Instance.puzzle.DrawPile[count - 1];
+                                    string hash = lastDrawPileCard.OnlineHash();
 
                                     // Remove from draw pile
                                     GameMode.Instance.puzzle.DrawPile.Remove(lastDrawPileCard);
@@ -179,7 +180,6 @@ public class InputPlayer : GamePlayer
                                     Cards.Add(lastDrawPileCard);
 
                                     // Handle Online gameplay
-                                    string hash = lastDrawPileCard.OnlineHash();
                                     param.Add("draw-rem&cards-add", hash);
 
                                     OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ACTION, MiniJSON.Json.Serialize(param));

@@ -20,7 +20,7 @@ public enum ePuzzleState {
 public class Puzzle : Mode {
 
     public ePuzzleState PuzzleState;
-    private int NumPlayers;
+    public int NumPlayers;
     private int TurnCount;
     private int CardsToDistribute;
     private int[] ActorIndices = {-1, -1, -1, -1};
@@ -392,13 +392,13 @@ public class Puzzle : Mode {
         GameMode.Instance.puzzle.PuzzleState = ePuzzleState.E_PS_SELECT_PLAYERS;
     }
 
-    public void HandleOnlineAction(string param, Player player)
+    public void HandleOnlineAction(string param, GamePlayer player)
     {
         OnlinePlayer oplyr = null;
         // Trace the player
         for (int i = 0; i < this.NumPlayers; i++)
         {
-            if (this.Players[i].ActorIndex == player.ActorNumber)
+            if (this.Players[i].ActorIndex == player.ActorIndex)
             {
                 oplyr = (OnlinePlayer)this.Players[i];
                 break;

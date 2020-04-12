@@ -256,16 +256,20 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
     ////////////////////////////////////////////////////////////////////////////////////////////
     #region ONLINE NETWORKING
 
-    public void NetworkMessage(eMessage message, string param, RpcTarget target = RpcTarget.Others)
+    public void NetworkMessage(eMessage message, string param, GamePlayer actioneer = null, RpcTarget target = RpcTarget.Others)
     {
         if (!IsOnlineGame())
             return;
 
-        this.photonView.RPC("OnNetworkMessage", target, message, param);
+        int actorIndex = PhotonNetwork.MasterClient.ActorNumber;
+        if (actioneer != null)
+            actorIndex = actioneer.ActorIndex;
+
+        this.photonView.RPC("OnNetworkMessage", target, message, param, actorIndex);
     }
 
     [PunRPC]
-    public void OnNetworkMessage(eMessage message, string param, PhotonMessageInfo info)
+    public void OnNetworkMessage(eMessage message, string param, int actorIndex, PhotonMessageInfo info)
     {
         switch(message)
         {
@@ -283,8 +287,18 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
                 break;
             case eMessage.E_M_PLAYER_ACTION:
                 {
+                    Puzzle puzzle = GameMode.Instance.puzzle;
+                    GamePlayer sender = null;
+                    for (int i = 0; i < puzzle.NumPlayers; i++)
+                    {
+                        if (puzzle.Players[i].ActorIndex == actorIndex)
+                        {
+                            sender = puzzle.Players[i];
+                            break;
+                        }
+                    }
                     // Handle remote player's action
-                    GameMode.Instance.puzzle.HandleOnlineAction(param, info.Sender);
+                    GameMode.Instance.puzzle.HandleOnlineAction(param, sender);
                 }
                 break;
             default:

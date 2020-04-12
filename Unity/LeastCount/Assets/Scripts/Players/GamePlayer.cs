@@ -30,7 +30,7 @@ public class GamePlayer : MonoBehaviour
     {
     }
 
-    public virtual void ProcessTurn(int actorIndex)
+    public virtual void ProcessTurn(int index, bool online)
     {
     }
 

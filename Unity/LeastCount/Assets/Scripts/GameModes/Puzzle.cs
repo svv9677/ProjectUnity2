@@ -249,9 +249,16 @@ public class Puzzle : Mode {
                 break;
             case ePuzzleState.E_PS_PLAYER_TURN:
                 {
-                    int actorIndex = this.ActorIndices[this.TurnCount % this.NumPlayers];
-
-                    ProcessTurnForAll(actorIndex);
+                    if(!online)
+                    {
+                        int playerIndex = this.TurnCount % this.NumPlayers;
+                        ProcessTurnForAll(playerIndex);
+                    }
+                    else
+                    {
+                        int actorIndex = this.ActorIndices[this.TurnCount % this.NumPlayers];
+                        ProcessTurnForAll(actorIndex, true);
+                    }
                 }
                 break;
     		default:
@@ -505,10 +512,10 @@ public class Puzzle : Mode {
         }
     }
 
-    public void ProcessTurnForAll(int actorIndex)
+    public void ProcessTurnForAll(int Index, bool online = false)
     {
         for(int i=0; i<Players.Count; i++)
-            Players[i].ProcessTurn(actorIndex);
+            Players[i].ProcessTurn(Index, online);
     }
 
     public void IncrementTurn() 

@@ -16,12 +16,23 @@ public class OnlinePlayer : GamePlayer
         }
     }
 
-    public override void ProcessTurn(int actorIndex)
+    public override void ProcessTurn(int index, bool online)
     {
-        if (this.ActorIndex != actorIndex)
+        if (online)
         {
-            this.MyTurn = false;
-            return;
+            if (this.ActorIndex != index)
+            {
+                this.MyTurn = false;
+                return;
+            }
+        }
+        else
+        {
+            if (this.PlayerIndex != index)
+            {
+                this.MyTurn = false;
+                return;
+            }
         }
 
         if (!this.MyTurn)

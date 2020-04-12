@@ -305,18 +305,30 @@ public class InputPlayer : GamePlayer
     //        DebugMenu.Instance.gameObject.SetActive(true);
     //}
 
-    public override void ProcessTurn(int actorIndex)
+    public override void ProcessTurn(int index, bool online)
     {
-        if (this.ActorIndex == actorIndex)
+        if (online)
         {
-            if (!this.MyTurn)
+            if (this.ActorIndex != index)
             {
-                this.MyTurn = true;
-                SetTurnState(eTurnState.E_TS_SELECT_CARDS);
+                this.MyTurn = false;
+                return;
             }
         }
         else
-            this.MyTurn = false;
+        {
+            if (this.PlayerIndex != index)
+            {
+                this.MyTurn = false;
+                return;
+            }
+        }
+
+        if (!this.MyTurn)
+        {
+            this.MyTurn = true;
+            SetTurnState(eTurnState.E_TS_SELECT_CARDS);
+        }
     }
 }
 

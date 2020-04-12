@@ -350,7 +350,7 @@ public class Puzzle : Mode {
             {
                 if(player.ActorIndex == indices[i])
                 {
-                    Debug.Log(string.Format("Setting cards for player: {0} - {1}", player.ActorIndex, player.NickName));
+                    //Debug.Log(string.Format("Setting cards for player: {0} - {1}", player.ActorIndex, player.NickName));
                     player.SetCards(DeckManager.Instance.mDeck.GetRange(0, this.CardsToDistribute));
                     DeckManager.Instance.mDeck.RemoveRange(0, this.CardsToDistribute);
                     break;
@@ -380,7 +380,7 @@ public class Puzzle : Mode {
     {
         // Load the shuffled deck
         DeckManager.Instance.DeckFromString(param);
-        Debug.Log(DeckManager.Instance.DeckAsString());
+        //Debug.Log(DeckManager.Instance.DeckAsString());
         // Set puzzle state to distribute cards and move ahead!
         GameMode.Instance.puzzle.PuzzleState = ePuzzleState.E_PS_SELECT_PLAYERS;
     }

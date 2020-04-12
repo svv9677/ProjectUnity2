@@ -147,7 +147,7 @@ public class OnlineUI : MonoBehaviour
 
     private void OnClickJoinRoomCB(bool success, short code, string info)
     {
-        Debug.Log("OnClickJoinRoomCB: " + success + " : " + code + " : " + info);
+        //Debug.Log("OnClickJoinRoomCB: " + success + " : " + code + " : " + info);
         if (!success)
             Globals.ShowToast("Failed to join room\nCode: " + code.ToString() + "\nMessage: " + info);
         else

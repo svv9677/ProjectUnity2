@@ -9,6 +9,7 @@ public class AIPlayer: GamePlayer
     private eCardNumber HighestTalliedCardNumber;
     private int HighestTally;
     private int MatchingCount;
+    private Dictionary<string, string> OnlineParam;
 
     public AIPlayer ()
     {
@@ -52,6 +53,11 @@ public class AIPlayer: GamePlayer
 
     public IEnumerator CheckAndIncrementTurn()
     {
+        if (this.OnlineParam == null)
+            this.OnlineParam = new Dictionary<string, string>();
+        else
+            this.OnlineParam.Clear();
+
         // Check our cards for highest tally, including dupes
         yield return StartCoroutine(TallyHighestCardsToDrop());
 
@@ -61,6 +67,9 @@ public class AIPlayer: GamePlayer
         // Decide whether we want to drop matching card(s) or
         //  drop highest tally, and drop them
         yield return StartCoroutine(DecideAndDropCards());
+
+        this.OnlineParam.Add("incr-turn", "");
+        OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ACTION, MiniJSON.Json.Serialize(this.OnlineParam));
 
         yield return new WaitForSeconds(1);
 
@@ -72,6 +81,7 @@ public class AIPlayer: GamePlayer
 
         // process user turn via AI and set counter to 1 when done!
         GameMode.Instance.puzzle.IncrementTurn();
+
         yield return null;
     }
 
@@ -189,6 +199,7 @@ public class AIPlayer: GamePlayer
                 for (int i = 0; i < GameMode.Instance.puzzle.LastDroppedCardCount; i++)
                 {
                     Card lastUsedPileCard = GameMode.Instance.puzzle.UsedPile[usedCount - 1 - i];
+                    string hash = lastUsedPileCard.OnlineHash();
 
                     // Remove from used pile
                     GameMode.Instance.puzzle.UsedPile.Remove(lastUsedPileCard);
@@ -196,6 +207,9 @@ public class AIPlayer: GamePlayer
                     lastUsedPileCard.SetPrefix(Globals.PLAYER_PREFIXES[PlayerIndex]);
                     lastUsedPileCard.mMoveDirty = true;
                     Cards.Add(lastUsedPileCard);
+
+                    // Handle Online gameplay
+                    this.OnlineParam.Add("used-rem&cards-add-" + i.ToString(), hash);
                 }
             }
             else
@@ -212,6 +226,7 @@ public class AIPlayer: GamePlayer
                 //Add the card from draw pile to our list
                 int drawCount = GameMode.Instance.puzzle.DrawPile.Count;
                 Card lastDrawPileCard = GameMode.Instance.puzzle.DrawPile[drawCount - 1];
+                string hash = lastDrawPileCard.OnlineHash();
 
                 // Remove from draw pile
                 GameMode.Instance.puzzle.DrawPile.Remove(lastDrawPileCard);
@@ -219,18 +234,29 @@ public class AIPlayer: GamePlayer
                 lastDrawPileCard.SetPrefix(Globals.PLAYER_PREFIXES[PlayerIndex]);
                 lastDrawPileCard.mMoveDirty = true;
                 Cards.Add(lastDrawPileCard);
+
+                // Handle Online gameplay
+                this.OnlineParam.Add("draw-rem&cards-add", hash);
             }
 
             // Set how many cards we are dropping onto used pile this turn
             GameMode.Instance.puzzle.LastDroppedCardCount = CardsSelected.Count;
 
+            // Handle Online gameplay
+            this.OnlineParam.Add("last-dropped-count", CardsSelected.Count.ToString());
+
             // drop our selected cards onto used pile, also remove them from our card list
+            int dd = 0;
             foreach (Card card in CardsSelected)
             {
+                string hash1 = card.OnlineHash();
                 Cards.Remove(card);
                 card.SetPrefix("__");
                 card.mMoveDirty = true;
                 GameMode.Instance.puzzle.UsedPile.Add(card);
+
+                this.OnlineParam.Add("cards-rem&used-add-" + dd.ToString(), hash1);
+                dd++;
             }
         }
 

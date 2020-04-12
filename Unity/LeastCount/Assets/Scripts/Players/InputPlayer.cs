@@ -139,6 +139,7 @@ public class InputPlayer : GamePlayer
                                 //  and add it to our card list
                                 if (!cardMatches)
                                 {
+                                    Dictionary<string, string> param = new Dictionary<string, string>();
                                     if (GameMode.Instance.puzzle.LastDroppedCardCount == 0)
                                         GameMode.Instance.puzzle.LastDroppedCardCount = 1;
                                     for (int i = 0; i < GameMode.Instance.puzzle.LastDroppedCardCount; i++)
@@ -154,14 +155,10 @@ public class InputPlayer : GamePlayer
                                         Cards.Add(lastUsedPileCard);
 
                                         // Handle Online gameplay
-                                        Dictionary<string, string> param = new Dictionary<string, string>();
                                         string hash = lastUsedPileCard.OnlineHash();
-                                        param["action"] = "used-rem";
-                                        param["card"] = hash;
-                                        param["action"] = "add";
-                                        param["card"] = hash;
-                                        OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ACTION, MiniJSON.Json.Serialize(param));
+                                        param.Add("used-rem&cards-add", hash);
                                     }
+                                    OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ACTION, MiniJSON.Json.Serialize(param));
                                 }
                             }
                             else
@@ -170,6 +167,7 @@ public class InputPlayer : GamePlayer
                                 //  and add it to our card list
                                 if (!cardMatches)
                                 {
+                                    Dictionary<string, string> param = new Dictionary<string, string>();
                                     count = GameMode.Instance.puzzle.DrawPile.Count;
                                     Card lastDrawPileCard = GameMode.Instance.puzzle.DrawPile[count - 1];
 
@@ -179,23 +177,39 @@ public class InputPlayer : GamePlayer
                                     lastDrawPileCard.SetPrefix(Globals.PLAYER_PREFIXES[PlayerIndex]);
                                     lastDrawPileCard.mMoveDirty = true;
                                     Cards.Add(lastDrawPileCard);
+
+                                    // Handle Online gameplay
+                                    string hash = lastDrawPileCard.OnlineHash();
+                                    param.Add("draw-rem&cards-add", hash);
+
+                                    OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ACTION, MiniJSON.Json.Serialize(param));
                                 }
                             }
 
                             // Set how many cards we are dropping onto used pile this turn
                             GameMode.Instance.puzzle.LastDroppedCardCount = CardsSelected.Count;
 
+                            // Handle Online gameplay
+                            Dictionary<string, string> param1 = new Dictionary<string, string>();
+                            param1.Add("last-dropped-count", CardsSelected.Count.ToString());
+
                             // drop our selected cards onto used pile, also remove them from our card list
                             foreach (Card card in CardsSelected)
                             {
+                                string hash1 = card.OnlineHash();
                                 Cards.Remove(card);
                                 card.SetPrefix("__");
                                 card.mMoveDirty = true;
                                 GameMode.Instance.puzzle.UsedPile.Add(card);
+
+                                param1.Add("cards-rem&used-add", hash1);
                             }
 
                             TurnState = eTurnState.E_TS_EXCHANGE_CARDS;
                             StartCoroutine(PerformDisplay());
+
+                            param1.Add("incr-turn", "");
+                            OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_ACTION, MiniJSON.Json.Serialize(param1));
 
                             return;
                         }
@@ -269,25 +283,25 @@ public class InputPlayer : GamePlayer
     }
 
     // Update is called once per frame
-    public void Update ()
-    {
-        if (Input.GetKeyDown (KeyCode.Escape)) 
-            GameMode.Instance.SetMode(eMode.E_M_SPLASH);
+    //public void Update ()
+    //{
+    //    if (Input.GetKeyDown (KeyCode.Escape)) 
+    //        GameMode.Instance.SetMode(eMode.E_M_SPLASH);
 
-        if(Input.GetKeyDown(KeyCode.BackQuote))
-            ToggleDebugMenu();
+    //    if(Input.GetKeyDown(KeyCode.BackQuote))
+    //        ToggleDebugMenu();
 
-        if(Input.GetKeyDown(KeyCode.R))
-            GameMode.Instance.SetMode(eMode.E_M_RESULTS);
-    }
+    //    if(Input.GetKeyDown(KeyCode.R))
+    //        GameMode.Instance.SetMode(eMode.E_M_RESULTS);
+    //}
 
-    public void ToggleDebugMenu()
-    {
-        if (DebugMenu.Instance.gameObject.activeSelf)
-            DebugMenu.Instance.gameObject.SetActive(false);
-        else
-            DebugMenu.Instance.gameObject.SetActive(true);
-    }
+    //public void ToggleDebugMenu()
+    //{
+    //    if (DebugMenu.Instance.gameObject.activeSelf)
+    //        DebugMenu.Instance.gameObject.SetActive(false);
+    //    else
+    //        DebugMenu.Instance.gameObject.SetActive(true);
+    //}
 
     public override void ProcessTurn(int playerIndex)
     {

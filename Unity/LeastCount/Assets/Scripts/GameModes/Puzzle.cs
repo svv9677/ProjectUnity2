@@ -360,11 +360,109 @@ public class Puzzle : Mode {
 
     public void HandleOnlineAction(string param, Player player)
     {
+        OnlinePlayer oplyr = null;
+        // Trace the player
+        for (int i = 0; i < this.NumPlayers; i++)
+        {
+            if (this.Players[i].ActorIndex == player.ActorNumber)
+            {
+                oplyr = (OnlinePlayer)this.Players[i];
+                break;
+            }
+        }
         Dictionary<string, object> paramObj = (Dictionary<string, object>)MiniJSON.Json.Deserialize(param);
         foreach(KeyValuePair<string, object> entry in paramObj)
         {
             string val = (string)entry.Value;
+            switch (entry.Key)
+            {
+                case "incr-turn":
+					{
+                        StartCoroutine(oplyr.PerformDisplay());
+					}
+                    break;
+                // Add the card to used pile and remove from Cards
+                case "cards-rem&used-add":
+					{
+                        if(oplyr != null)
+						{
+                            // Find the card
+                            for (int i=0; i<oplyr.Cards.Count; i++)
+							{
+                                if(oplyr.Cards[i].OnlineHash() == val)
+								{
+                                    Card card = oplyr.Cards[i];
+                                    oplyr.Cards.Remove(card);
+                                    card.SetPrefix("__");
+                                    card.mMoveDirty = true;
+                                    this.UsedPile.Add(card);
+                                    break;
+								}
+							}
+						}
+                    }
+                    break;
+                // Add the card to player's cards & Remove card from used pile
+                case "used-rem&cards-add":
+					{
+                        // Trace the card in Used Pile
+                        Card card = null;
+                        for (int i = this.UsedPile.Count - 1; i >= 0; i--)
+                        {
+                            if (this.UsedPile[i].OnlineHash() == val)
+                            {
+                                card = this.UsedPile[i];
+                                this.UsedPile.Remove(card);
+                                break;
+                            }
+                        }
+                        if (card != null)
+                        {
+                            if(oplyr != null)
+                            { 
+                                card.SetPrefix(Globals.PLAYER_PREFIXES[oplyr.PlayerIndex]);
+                                card.mMoveDirty = true;
+                                oplyr.Cards.Add(card);
+                            }
+                        }
+                    }
+                    break;
+                // Add the card to player's cards & Remove card from draw pile
+                case "draw-rem&cards-add":
+                    {
+                        // Trace the card in Draw Pile
+                        Card card = null;
+                        for (int i = this.DrawPile.Count - 1; i >= 0; i--)
+                        {
+                            if (this.DrawPile[i].OnlineHash() == val)
+                            {
+                                card = this.DrawPile[i];
+                                this.DrawPile.Remove(card);
+                                break;
+                            }
+                        }
+                        if (card != null)
+                        {
+                            if (oplyr != null)
+                            { 
+                                card.SetPrefix(Globals.PLAYER_PREFIXES[oplyr.PlayerIndex]);
+                                card.mMoveDirty = true;
+                                oplyr.Cards.Add(card);
+                            }
+                        }
+                    }
+                    break;
+                // Set last dropped card count
+                case "last-dropped-count":
+					{
+                        int cnt = System.Convert.ToInt32(val);
 
+                        this.LastDroppedCardCount = cnt;
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
 
         Debug.Log(paramObj.ToString());

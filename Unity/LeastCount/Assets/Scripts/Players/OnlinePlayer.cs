@@ -53,4 +53,19 @@ public class OnlinePlayer : GamePlayer
             Cards[i].SetSelectable(true);
         }
     }
+
+    public IEnumerator PerformDisplay()
+    {
+        GameMode.Instance.puzzle.MyPuzzleUI.UpdateDistributionDisplays(GameMode.Instance.puzzle);
+
+        yield return new WaitForSeconds(1);
+
+        this.OrderCardsDisplay();
+
+        yield return new WaitForSeconds(1);
+
+        GameMode.Instance.puzzle.IncrementTurn();
+        yield return null;
+    }
+
 }

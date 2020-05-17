@@ -54,9 +54,15 @@ public class Puzzle : Mode {
         return null;
     }
 
-    public void OnLeastCount(int playerIndex)
+    public void OnLeastCountClicked()
     {
-        List<Card> Cards = Players[playerIndex].Cards;
+        GamePlayer player = Players[0];
+        OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_LEAST_COUNT, "", player, Photon.Pun.RpcTarget.All);
+    }
+
+    public void OnLeastCount(GamePlayer player)
+    {
+        List<Card> Cards = player.Cards;
 
         int total = 0;
         foreach (Card card in Cards)
@@ -66,7 +72,72 @@ public class Puzzle : Mode {
                 val = 10;
             total += val;
         }
-        string text = Players[playerIndex].NickName + " - LEAST COUNT!! Count: " + total.ToString();
+        string text = "LEAST COUNT called by " + player.NickName + "!! They scored " + total.ToString() + "<br>";
+
+        int[] totals = new int[NumPlayers];
+        int[] scores = new int[NumPlayers];
+        int highest_total = 0;
+        int lowest_total = 1000;
+        int lowest_index = -1;
+
+        // Now compare other players' scores and determine the winner
+        for(int i=0; i<NumPlayers; i++)
+        {
+            // ignore current player
+            if (i == player.PlayerIndex)
+                continue;
+
+            List<Card> cards = Players[i].Cards;
+
+            int curr_total = 0;
+            foreach (Card card in cards)
+            {
+                int val = (int)card.mNumber;
+                if (val > 10)
+                    val = 10;
+                curr_total += val;
+            }
+
+            totals[i] = curr_total;
+            if (curr_total >= highest_total)
+                highest_total = curr_total;
+            if (curr_total < lowest_total)
+            {
+                lowest_total = curr_total;
+                lowest_index = i;
+            }
+        }
+
+        // if the lowest total from other players is lower than LC claim
+        if(lowest_total <= total)
+        {
+            for(int i=0; i<NumPlayers; i++)
+            {
+                // LC claim player gets highest total
+                if (i == player.PlayerIndex)
+                    scores[i] = highest_total;
+                // Others get their total - lowest total
+                else
+                    scores[i] = totals[i] - lowest_total;
+            }
+            text += "However, " + Players[lowest_index].NickName + " won with " + lowest_total.ToString() + " score!";
+        }
+        // if not, LC claim  is winner
+        else
+        {
+            for (int i = 0; i < NumPlayers; i++)
+            {
+                // LC claim player gets 0
+                if (i == player.PlayerIndex)
+                    scores[i] = 0;
+                // Others get their total - player's total
+                else
+                    scores[i] = totals[i] - total;
+            }
+            text += "and is the winner!";
+        }
+
+
         Globals.ShowToast(text, 15, 5.0f);
         Debug.Log(text);
     }
@@ -124,7 +195,7 @@ public class Puzzle : Mode {
                     {
                         // shuffle the deck first!
                         DeckManager.Instance.mDeck.Shuffle();
-                        Debug.Log(DeckManager.Instance.DeckAsString());
+                        //Debug.Log(DeckManager.Instance.DeckAsString());
                         // set to next state
                         this.PuzzleState = ePuzzleState.E_PS_SELECT_PLAYERS;
 

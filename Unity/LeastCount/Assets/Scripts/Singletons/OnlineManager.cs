@@ -301,6 +301,21 @@ public class OnlineManager : OnlineSingleton<OnlineManager>
                     GameMode.Instance.puzzle.HandleOnlineAction(param, sender);
                 }
                 break;
+            case eMessage.E_M_PLAYER_LEAST_COUNT:
+                {
+                    Puzzle puzzle = GameMode.Instance.puzzle;
+                    GamePlayer sender = null;
+                    for (int i = 0; i < puzzle.NumPlayers; i++)
+                    {
+                        if (puzzle.Players[i].ActorIndex == actorIndex)
+                        {
+                            sender = puzzle.Players[i];
+                            break;
+                        }
+                    }
+                    GameMode.Instance.puzzle.OnLeastCount(sender);
+                }
+                break;
             default:
                 Debug.Log(String.Format("NETWORKMESSAGE: {0} sent {1} : {2}", info.Sender.NickName, message, param));
                 break;
@@ -317,5 +332,6 @@ public enum eMessage
     E_M_PLAYER_ORDER,
     E_M_PLAYER_ACTION,
     E_M_PLAYER_END_TURN,
+    E_M_PLAYER_LEAST_COUNT,
 }
 

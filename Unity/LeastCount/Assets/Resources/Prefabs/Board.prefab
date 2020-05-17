@@ -213,11 +213,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PuzzleState: 0
+  NumPlayers: 0
   Players: []
   LastDroppedCardCount: 0
-  AIPlayer1Name: {fileID: 8668631377943726365}
-  AIPlayer2Name: {fileID: 8962839978303590933}
-  AIPlayer3Name: {fileID: 1815885048240687076}
   MyPuzzleUI: {fileID: 0}
 --- !u!114 &4659792534181153399
 MonoBehaviour:
@@ -1364,8 +1362,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114777886485518018}
-        m_MethodName: OnLeastCount
-        m_Mode: 3
+        m_MethodName: OnLeastCountClicked
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

@@ -8,7 +8,10 @@ public class Online : Mode
     public override void EnterMode()
     {
         MyOnlineUI = this.gameObject.GetComponent<OnlineUI>();
-        MyOnlineUI.OnInit();
+        if (GameMode.Instance.modeParam == "ReEnter")
+            MyOnlineUI.OnReEnter();
+        else
+            MyOnlineUI.OnInit();
 
         base.EnterMode();
     }

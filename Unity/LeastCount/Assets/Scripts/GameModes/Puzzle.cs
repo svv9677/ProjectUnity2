@@ -37,11 +37,6 @@ public class Puzzle : Mode {
         return string.Format ("State: {0}, Turn: {1}, DrawPile: {2}, UsedPile: {3}", PuzzleState, TurnCount, DrawPile?.Count, UsedPile?.Count);
 	}
 
-	protected void SetVisible(bool hideFlags)
-	{
-		this.gameObject.SetActive (hideFlags);
-	}
-
     public GameObject GetAIParentForIndex(int index)
     {
         if (index == 1)
@@ -54,10 +49,18 @@ public class Puzzle : Mode {
         return null;
     }
 
+    public void LeastCount(GamePlayer player)
+    {
+        if (OnlineManager.Instance.IsOnlineGame())
+            OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_LEAST_COUNT, "", player, Photon.Pun.RpcTarget.All);
+        else
+            OnLeastCount(player);
+    }
+
     public void OnLeastCountClicked()
     {
         GamePlayer player = Players[0];
-        OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_LEAST_COUNT, "", player, Photon.Pun.RpcTarget.All);
+        LeastCount(player);
     }
 
     public void OnLeastCount(GamePlayer player)
@@ -72,7 +75,7 @@ public class Puzzle : Mode {
                 val = 10;
             total += val;
         }
-        string text = "LEAST COUNT called by " + player.NickName + "!! They scored " + total.ToString() + "<br>";
+        string text = "LEAST COUNT called by " + player.NickName + "!! They scored " + total.ToString() + "\n";
 
         int[] totals = new int[NumPlayers];
         int[] scores = new int[NumPlayers];
@@ -137,9 +140,16 @@ public class Puzzle : Mode {
             text += "and is the winner!";
         }
 
+        totals[player.PlayerIndex] = total;
 
         Globals.ShowToast(text, 15, 5.0f);
         Debug.Log(text);
+
+        // Add the scores to Scoring Manager
+        ScoringManager.Instance.AddScores(scores, totals);
+
+        // Kick off Results UI
+        GameMode.Instance.SetMode(eMode.E_M_RESULTS);
     }
 
     public override void EnterMode()
@@ -169,14 +179,14 @@ public class Puzzle : Mode {
 
         this.PuzzleState = ePuzzleState.E_PS_SHUFFLE_CARDS;
         this.MyPuzzleUI = this.gameObject.GetComponent<PuzzleUI>();
-		this.SetVisible (true);
+
+        DeckManager.Instance.Load();
 
         base.EnterMode();
 	}
 
 	public override void ExitMode()
 	{
-        this.SetVisible (false);
 	}
 	
 	// Update is called once per frame

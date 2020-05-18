@@ -27,6 +27,8 @@ public class GameMode : Singleton<GameMode> {
     public GameObject boardObj;
     public GameObject cardsParentObj;
 
+	public string modeParam;
+
 	// Use this for initialization
 	void Start () {
 		this.puzzle?.gameObject.SetActive(false);
@@ -39,10 +41,11 @@ public class GameMode : Singleton<GameMode> {
 		SetMode (eMode.E_M_SPLASH);
 	}
 	
-	public void SetMode(eMode new_mode)
+	public void SetMode(eMode new_mode, string param = "")
 	{
 		ExitMode();
 		this.mode = new_mode;
+		this.modeParam = param;
 		EnterMode();
 	}
 
@@ -51,6 +54,7 @@ public class GameMode : Singleton<GameMode> {
 		if(this.mode != eMode.E_M_NONE)
 		{
 			this.modeObject.ExitMode();
+			this.modeObject.gameObject.SetActive(false);
 			this.modeObject = null;
 		}
 	}

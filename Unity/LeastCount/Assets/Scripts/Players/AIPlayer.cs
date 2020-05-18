@@ -176,7 +176,7 @@ public class AIPlayer: GamePlayer
         //  may be we should check on calling leastCount!!
         if(val1 == 0 && val2 < 0 && val3 < 0)
         {
-            OnlineManager.Instance.NetworkMessage(eMessage.E_M_PLAYER_LEAST_COUNT, "", this, Photon.Pun.RpcTarget.All);
+            GameMode.Instance.puzzle.LeastCount(this);
         }
         else
         {

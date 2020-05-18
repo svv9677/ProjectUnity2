@@ -39,7 +39,7 @@ public class InputPlayer : GamePlayer
         // Unhook into the OnFingerTap event
         Lean.LeanTouch.OnFingerTap -= OnFingerTap;
         //Lean.LeanTouch.OnMultiTap -= OnMultiTap;
-        Debug.Log("Input Player onDisabled calleD!!");
+        //Debug.Log("Input Player onDisabled calleD!!");
     }
 
     public override void SetCards(List<Card> cards)
@@ -145,6 +145,13 @@ public class InputPlayer : GamePlayer
                                     for (int i = 0; i < GameMode.Instance.puzzle.LastDroppedCardCount; i++)
                                     {
                                         count = GameMode.Instance.puzzle.UsedPile.Count;
+                                        // Err, this is happening some times, dunno why
+                                        if (count == 0)
+                                        {
+                                            GameMode.Instance.puzzle.UsedPile.AddRange(GameMode.Instance.puzzle.DrawPile.GetRange(0, 1));
+                                            GameMode.Instance.puzzle.DrawPile.RemoveRange(0, 1);
+                                            count = 1;
+                                        }
                                         lastUsedPileCard = GameMode.Instance.puzzle.UsedPile[count - 1];
                                         string hash = lastUsedPileCard.OnlineHash();
 

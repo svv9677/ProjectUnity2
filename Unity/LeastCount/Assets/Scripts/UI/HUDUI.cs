@@ -23,6 +23,15 @@ public class HUDUI : MonoBehaviour
 
     public void OnClickBack()
     {
-
+        if (GameMode.Instance.mode == eMode.E_M_RESULTS)
+        {
+            if (OnlineManager.Instance.IsOnlineGame())
+            {
+                GameMode.Instance.modeParam = "ReEnter";
+                GameMode.Instance.SetMode(eMode.E_M_ONLINE);
+            }
+            else
+                GameMode.Instance.SetMode(eMode.E_M_PUZZLE);
+        }
     }
 }

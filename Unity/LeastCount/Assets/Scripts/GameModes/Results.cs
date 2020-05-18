@@ -15,7 +15,6 @@ public class Results : Mode
 
     public override void ExitMode()
     {
-
         base.ExitMode();
     }
 

@@ -15,14 +15,20 @@ public class ResultsUI : MonoBehaviour
 
     public void OnInit()
     {
-        Player1Text.text = "MEEE\n100";
-        Player2Text.text = "AI Player 1\n130";
-        Player3Text.text = "AI Player 2\n117";
-        Player4Text.text = "AI Player 3\n230";
+        ScoringManager mgr = ScoringManager.Instance;
+        Player1Text.text = GameMode.Instance.puzzle.Players[0].NickName + "\n" + mgr.Totals.Scores[0];
+        Player2Text.text = GameMode.Instance.puzzle.Players[1].NickName + "\n" + mgr.Totals.Scores[1];
+        Player3Text.text = GameMode.Instance.puzzle.Players[2].NickName + "\n" + mgr.Totals.Scores[2];
+        Player4Text.text = GameMode.Instance.puzzle.Players[3].NickName + "\n" + mgr.Totals.Scores[3];
+
+        for(int i=0; i<scrollContent.transform.childCount; i++)
+        {
+            GameObject.Destroy(scrollContent.transform.GetChild(i).gameObject);
+        }
 
         RectTransform pTrans = resultItemPrefab.transform as RectTransform;
         resultItemPrefab.SetActive(false);
-        for (int i = 0; i < 30; i++)
+        for (int i = mgr.Rounds.Count-1; i >=0; i--)
         {
             GameObject obj = GameObject.Instantiate(resultItemPrefab) as GameObject;
             obj.transform.SetParent(scrollContent.transform, false);
@@ -35,17 +41,18 @@ public class ResultsUI : MonoBehaviour
             ResultsItem item = obj.GetComponent<ResultsItem>();
             string prefix = "";
             string postfix = "";
-            if (i == 0)
+            if (i == mgr.Rounds.Count - 1)
             {
                 prefix = "<b>";
                 postfix = "</b>";
             }
-            item.Round.text = prefix + (30 - i).ToString() + postfix;
-            item.Player1Score.text = prefix + Random.Range(3, 30).ToString() + postfix;
-            item.Player2Score.text = prefix + Random.Range(3, 30).ToString() + postfix;
-            item.Player3Score.text = prefix + Random.Range(3, 30).ToString() + postfix;
-            item.Player4Score.text = prefix + Random.Range(3, 30).ToString() + postfix;
+            item.Round.text = prefix + (i+1).ToString() + postfix;
+            item.Player1Score.text = string.Format("{0}{1}({2}){3}", prefix, mgr.Rounds[i].Scores[0], mgr.Counts[i].Scores[0], postfix);
+            item.Player2Score.text = string.Format("{0}{1}({2}){3}", prefix, mgr.Rounds[i].Scores[1], mgr.Counts[i].Scores[1], postfix);
+            item.Player3Score.text = string.Format("{0}{1}({2}){3}", prefix, mgr.Rounds[i].Scores[2], mgr.Counts[i].Scores[2], postfix);
+            item.Player4Score.text = string.Format("{0}{1}({2}){3}", prefix, mgr.Rounds[i].Scores[3], mgr.Counts[i].Scores[3], postfix);
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(scrollContent.transform as RectTransform);
     }
+
 }

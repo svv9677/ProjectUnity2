@@ -475,6 +475,9 @@ public class Puzzle : Mode {
 
     public void HandleOnlineAction(string param, GamePlayer player)
     {
+        if (!this.isActiveAndEnabled)
+            return;
+
         OnlinePlayer oplyr = null;
         // Trace the player
         for (int i = 0; i < this.NumPlayers; i++)

@@ -35,6 +35,7 @@ public class Results : Mode
     {
         if(readyToCheck)
         {
+            int total = PhotonNetwork.PlayerList.Length;
             int count = 0;
             foreach (Player p in PhotonNetwork.PlayerList)
             {
@@ -46,13 +47,19 @@ public class Results : Mode
                 }
             }
 
-            if (count == Globals.gMinimumPlayers)
+            if (count == total)
             {
                 readyToCheck = false;
                 GameMode.Instance.SetMode(eMode.E_M_PUZZLE);
             }
             else
-                MyResultsUI.Message.text = "Waiting for " + (Globals.gMinimumPlayers - count).ToString() + " players...";
+            {
+                if(total-count == 1)
+                    MyResultsUI.Message.text = "Waiting for 1 more player...";
+                else
+                    MyResultsUI.Message.text = "Waiting for " + (total - count).ToString() + " players...";
+            }
+                
         }
     }
 

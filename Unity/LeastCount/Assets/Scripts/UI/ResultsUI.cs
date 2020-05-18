@@ -10,6 +10,8 @@ public class ResultsUI : MonoBehaviour
     public Text Player3Text;
     public Text Player4Text;
 
+    public Text Message;
+
     public GameObject scrollContent;
     public GameObject resultItemPrefab;
 
@@ -53,6 +55,8 @@ public class ResultsUI : MonoBehaviour
             item.Player4Score.text = string.Format("{0}{1}({2}){3}", prefix, mgr.Rounds[i].Scores[3], mgr.Counts[i].Scores[3], postfix);
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(scrollContent.transform as RectTransform);
+
+        Message.text = "Press the back button on top-right part of the screen to continue to the next round!";
     }
 
 }

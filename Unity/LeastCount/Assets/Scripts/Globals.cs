@@ -69,5 +69,6 @@ public static class Globals
 
     public const string PLAYER_READY = "IsPlayerReady";
     public const string HOST_START = "IsHostStarted";
+    public const string ROUND_READY = "IsRoundReady";
     public const int AI_PLAYER_INDEX_MULTIPLIER = 100;
 }

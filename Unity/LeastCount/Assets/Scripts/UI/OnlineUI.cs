@@ -51,16 +51,6 @@ public class OnlineUI : MonoBehaviour
         isPlayerReady = false;
     }
 
-    public void OnReEnter()
-    {
-        // Go directly into the room, and skip the lobby
-        SwitchToRoom();
-        // Our status was ready earlier
-        isPlayerReady = true;
-        // Now send message and set as 'not-ready' so that player can click ready when needed
-        OnClickReady();
-    }
-
     public void Update()
     {
         onlineStatusText.text = OnlineManager.Instance.ConnectionStatus;
@@ -327,6 +317,9 @@ public class OnlineUI : MonoBehaviour
     {
         PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.CurrentRoom.IsVisible = false;
+
+        // Game Level initialization
+        ScoringManager.Instance.Load();
 
         GameMode.Instance.SetMode(eMode.E_M_PUZZLE);
     }

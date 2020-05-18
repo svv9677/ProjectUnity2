@@ -26,10 +26,7 @@ public class HUDUI : MonoBehaviour
         if (GameMode.Instance.mode == eMode.E_M_RESULTS)
         {
             if (OnlineManager.Instance.IsOnlineGame())
-            {
-                GameMode.Instance.modeParam = "ReEnter";
-                GameMode.Instance.SetMode(eMode.E_M_ONLINE);
-            }
+                GameMode.Instance.results.CheckAndStartNextRound();
             else
                 GameMode.Instance.SetMode(eMode.E_M_PUZZLE);
         }

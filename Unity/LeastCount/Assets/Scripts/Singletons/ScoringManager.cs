@@ -38,14 +38,14 @@ public class ScoringManager : Singleton<ScoringManager> {
 
     public ScoringManager()
     {
-        Rounds = new List<ScoreRound>();
-        Counts = new List<ScoreRound>();
-        Totals = new ScoreRound();
     }
 
     // Use this for initialization
     public void Load()
     {
+        Rounds = new List<ScoreRound>();
+        Counts = new List<ScoreRound>();
+        Totals = new ScoreRound();
     }
 
     public void AddScores(int[] scores, int[] counts)
